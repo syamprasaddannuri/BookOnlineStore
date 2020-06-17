@@ -20,7 +20,7 @@ public class BookInventoryServiceInterfaceImpl implements BookInventoryServiceIn
 
     @Override
     public BookInventory addInventory(String isbn) {
-        BookInventory bookInventory = bookInventoryRepo.findByISBN(isbn);;
+        BookInventory bookInventory = bookInventoryRepo.findByISBN(isbn);
         if(bookInventory == null) {
             bookInventory.setCount(1);
             bookInventory.setISBN(isbn);

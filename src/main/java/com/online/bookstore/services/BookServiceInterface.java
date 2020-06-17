@@ -1,5 +1,6 @@
 package com.online.bookstore.services;
 
+import com.online.bookstore.dto.PaginatedBooks;
 import com.online.bookstore.dto.request.BookRequestDto;
 import com.online.bookstore.dto.response.BookResponseDto;
 import com.online.bookstore.exception.BookNotFoundException;
@@ -14,5 +15,5 @@ public interface BookServiceInterface {
 
     BookResponseDto deleteBook(String isbn) throws BookNotFoundException;
 
-    List<BookResponseDto> searchBooks(String searchKey) throws BookNotFoundException, UserNotFoundException;
+    PaginatedBooks searchBooks(String searchKey, int pageNo, int pageSize) throws BookNotFoundException, UserNotFoundException;
 }

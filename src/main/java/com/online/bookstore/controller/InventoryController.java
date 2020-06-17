@@ -19,21 +19,22 @@ public class InventoryController {
         this.bookInventoryServiceInterface = bookInventoryServiceInterface;
     }
 
-    @PostMapping
+    @PostMapping(URIEndpoints.ADD_INVENTORY)
     public ResponseEntity addInventory (@RequestParam ("ISBN") String ISBN) {
         return ResponseEntity.ok(bookInventoryServiceInterface.addInventory(ISBN));
     }
 
+    @PostMapping(URIEndpoints.DECREMENT_INVENTORY)
     public ResponseEntity decrementInventory (@RequestParam ("ISBN") String ISBN) throws InventoryNotFoundException, InventoryNotAvailableException {
         return ResponseEntity.ok(bookInventoryServiceInterface.decrementInventory(ISBN));
     }
 
-    @GetMapping
+    @GetMapping(URIEndpoints.GET_INVENTORY)
     public ResponseEntity getInventory (@RequestParam ("ISBN") String ISBN) throws InventoryNotFoundException {
         return ResponseEntity.ok(bookInventoryServiceInterface.getInventory(ISBN));
     }
 
-    @PostMapping
+    @PostMapping(URIEndpoints.DELETE_INVENTORY)
     public ResponseEntity deleteInventory(@RequestParam ("ISBN") String ISBN) throws InventoryNotFoundException, InventoryNotAvailableException {
         return ResponseEntity.ok(bookInventoryServiceInterface.deleteInventory(ISBN));
     }

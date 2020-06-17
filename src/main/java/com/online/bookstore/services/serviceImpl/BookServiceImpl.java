@@ -1,10 +1,12 @@
 package com.online.bookstore.services.serviceImpl;
 
 import com.online.bookstore.convertor.BookConvertor;
+import com.online.bookstore.dto.PaginatedBooks;
 import com.online.bookstore.dto.request.BookRequestDto;
 import com.online.bookstore.dto.response.BookResponseDto;
 import com.online.bookstore.exception.BookNotFoundException;
 import com.online.bookstore.model.Book;
+import com.online.bookstore.model.Pagination;
 import com.online.bookstore.model.User;
 import com.online.bookstore.repositories.BookRepo;
 import com.online.bookstore.repositories.UserRepo;
@@ -46,7 +48,7 @@ public class BookServiceImpl implements BookServiceInterface {
             if(book == null) {
                 throw new BookNotFoundException("Book not found for given ISBN");
             }
-            book.setStatus(false);
+            bookRepo.deleteBook(book);
             bookRepo.save(book);
         } catch (BookNotFoundException e) {
             e.printStackTrace();
@@ -55,15 +57,15 @@ public class BookServiceImpl implements BookServiceInterface {
     }
 
     @Override
-    public List<BookResponseDto> searchBooks(String searchKey) {
+    public PaginatedBooks searchBooks(String searchKey, int pageNo, int pageSize) {
         List<BookResponseDto> finalResult = new ArrayList<>();
         try {
-            List<Book> listByTitleAndISBN = bookRepo.searchByTitleAndISBN(searchKey);
+            List<Book> listByTitleAndISBN = bookRepo.searchByTitleAndISBN(searchKey, new Pagination(pageNo,pageSize));
             List<User> userList = userRepo.searchByAuthor(searchKey);
             List<Book> listByAuthor = new ArrayList<>();
             userList.forEach(
                     user -> {
-                        listByAuthor.add(bookRepo.findByAuthorId(user.getId()));
+                        listByAuthor.add(bookRepo.findByAuthorId(user.getId(),new Pagination(pageNo,pageSize)));
                     }
             );
             Set<Book> bookSet = new HashSet<>(listByTitleAndISBN);
@@ -80,6 +82,6 @@ public class BookServiceImpl implements BookServiceInterface {
         } catch (BookNotFoundException e) {
             e.printStackTrace();
         }
-        return finalResult;
+        return new PaginatedBooks(finalResult, (long) finalResult.size(),new Pagination(pageNo,pageSize));
     }
 }
