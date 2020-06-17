@@ -19,7 +19,6 @@ public class Book {
     private String title;
     private String authorId;
     private String description;
-    private boolean status;
 
     @Override
     public boolean equals(Object o) {
