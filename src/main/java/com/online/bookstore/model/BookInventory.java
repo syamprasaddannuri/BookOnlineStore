@@ -16,5 +16,5 @@ public class BookInventory {
     @Indexed(unique = true)
     private String ISBN;
     private int count;
-    private double price;
+    private boolean status;
 }

@@ -17,7 +17,7 @@ public class BookConvertor {
     public Book convertToBook(BookRequestDto bookRequestDto) {
         String author = bookRequestDto.getAuthor();
         User user = userRepo.getByUserName(author);
-        Book book = new Book(bookRequestDto.getISBN(), bookRequestDto.getTitle(),user.getId(),bookRequestDto.getDescription(),true);
+        Book book = new Book(bookRequestDto.getISBN(), bookRequestDto.getTitle(),user.getId(),bookRequestDto.getDescription());
         return book;
     }
 

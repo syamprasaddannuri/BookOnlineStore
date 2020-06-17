@@ -12,4 +12,8 @@ public class URIEndpoints {
     public static final String BOOK_ORDERING = "/api/ordering";
 
     public static final String INVENTORY_API = "/api/inventory";
+    public static final String ADD_INVENTORY = "/addInventory";
+    public static final String DECREMENT_INVENTORY = "/decrementInventory";
+    public static final String DELETE_INVENTORY = "/deleteInventory";
+    public static final String GET_INVENTORY = "/getInventory";
 }
