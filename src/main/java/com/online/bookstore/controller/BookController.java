@@ -31,7 +31,7 @@ public class BookController {
     }
 
     @GetMapping
-    public ResponseEntity searchBook(@RequestParam ("searchKey") String searchKey, @RequestParam ("pageno") int pageno, @RequestParam ("pagesize") int pagesize) throws BookNotFoundException, UserNotFoundException {
-        return ResponseEntity.ok(bookServiceInterface.searchBooks(searchKey,pageno,pagesize));
+    public ResponseEntity searchBook(@RequestParam ("searchKey") String searchKey, @RequestParam ("pageNo") int pageNo, @RequestParam ("pageSize") int pageSize) throws BookNotFoundException, UserNotFoundException {
+        return ResponseEntity.ok(bookServiceInterface.searchBooks(searchKey,pageNo,pageSize));
     }
 }

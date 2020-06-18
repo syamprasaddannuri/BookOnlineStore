@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 public class MediaServiceImpl implements MediaServiceInterface {
@@ -25,25 +27,15 @@ public class MediaServiceImpl implements MediaServiceInterface {
     }
 
     @Override
-    public List<MediaData> getPostsByISBN(String ISBN) {
+    public List<MediaData> getPostsByISBN(String ISBN)throws BookNotFoundException {
         List<MediaData> result = new ArrayList<>();
-        try {
-            Book book = bookRepo.findByISBN(ISBN);
-            if(book == null) {
-                throw new BookNotFoundException("Book not found for given ISBN");
-            }
-            String title = book.getTitle();
-            List<MediaData> mediaDataList = mediaClient.getPostsInMedia();
-            mediaDataList.forEach(
-                    mediaData -> {
-                        if(mediaData.getTitle().contains(title) || mediaData.getBody().contains(title)) {
-                            result.add(mediaData);
-                        }
-                    }
-            );
-        } catch (BookNotFoundException e) {
-            e.printStackTrace();
+        Book book = bookRepo.findByISBN(ISBN);
+        if(book == null) {
+            throw new BookNotFoundException("Book not found for given ISBN");
         }
+        String title = book.getTitle();
+        Map<String, Set<MediaData>> map= mediaClient.getPostsInMedia();
+        result.addAll(new ArrayList<>(map.get(title)));
         return result;
     }
 }

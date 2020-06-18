@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Objects;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -23,4 +25,20 @@ public class MediaData {
 
     @JsonProperty(value = "body")
     private String body;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof MediaData)) return false;
+        MediaData mediaData = (MediaData) o;
+        return Objects.equals(getUserId(), mediaData.getUserId()) &&
+                Objects.equals(getId(), mediaData.getId()) &&
+                Objects.equals(getTitle(), mediaData.getTitle()) &&
+                Objects.equals(getBody(), mediaData.getBody());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUserId(), getId(), getTitle(), getBody());
+    }
 }
