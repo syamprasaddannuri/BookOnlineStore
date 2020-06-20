@@ -20,7 +20,7 @@ public class BookOrderingController {
     }
 
     @GetMapping
-    public ResponseEntity buyBook(@RequestParam ("ISBN") String ISBN) throws BookNotFoundException, BookNotAvailableException {
+    public ResponseEntity buyBook(@RequestParam ("ISBN") String ISBN) throws BookNotAvailableException {
         return ResponseEntity.ok(bookOrderingServiceInterface.buyBook(ISBN));
     }
 }
