@@ -1,4 +1,5 @@
-#Book store service Design
+Book store service Design
+   
     1.Objective
         1.1: Goals and Non-goals
     2. Assumptions
@@ -13,7 +14,8 @@
     6. Performance,Scale and reliability
     7. Monitoring and alerting
 ---------------------------------------------------------------------------------------------------------------------------
-#Objective:
+Objective:
+    
     To offer users the ability to maintain an online book store and enable the users to buy books from online store.
         
     Goals: 
@@ -31,14 +33,18 @@
         - Managing user data.
         - Authentication of users.
         - Authorization of user actions
-#Assumptions:
+Assumptions:
+
     - Media search api is highly available
     - Price of book changes based only date.
-#Design and Architectural view:
+
+Design and Architectural view:
+
     High level design:
    ![alt text](hld.png)
 
     Components:
+    
     Book Store service:
         It exposes a set of apis to implement the use cases listed as part of goals.
     Media Service:
@@ -47,10 +53,12 @@
         Balances the load across multiple copies of the book store.
     Book store:
         Database to store the book related data.
-#Technologies:
+
+Technologies:
     Tools:
 
-#API’s:
+
+API’s:
     Add Book : 
         - This service is used to add the book.
         - What does this service do ?
