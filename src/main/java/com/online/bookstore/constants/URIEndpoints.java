@@ -16,4 +16,6 @@ public class URIEndpoints {
     public static final String DECREMENT_INVENTORY = "/decrementInventory";
     public static final String DELETE_INVENTORY = "/deleteInventory";
     public static final String GET_INVENTORY = "/getInventory";
+
+    public static final String PRICING_API = "/price/api";
 }

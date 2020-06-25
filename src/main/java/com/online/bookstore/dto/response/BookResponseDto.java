@@ -6,6 +6,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class BookResponseDto {
     private String ISBN;
     private String title;

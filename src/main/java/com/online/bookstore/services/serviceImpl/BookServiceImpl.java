@@ -41,47 +41,36 @@ public class BookServiceImpl implements BookServiceInterface {
     }
 
     @Override
-    public BookResponseDto deleteBook(String isbn) {
-        Book book = null;
-        try {
-            book = bookRepo.findByISBN(isbn);
-            if(book == null) {
-                throw new BookNotFoundException("Book not found for given ISBN");
-            }
-            bookRepo.deleteBook(book);
-            bookRepo.save(book);
-        } catch (BookNotFoundException e) {
-            e.printStackTrace();
+    public void deleteBook(String isbn) throws BookNotFoundException {
+        Book book = bookRepo.findByISBN(isbn);
+        if(book == null) {
+            throw new BookNotFoundException("Book not found for given ISBN");
         }
-        return bookConvertor.convertToBookResponseDto(book);
+        bookRepo.deleteBook(book);
     }
 
     @Override
-    public PaginatedBooks searchBooks(String searchKey, int pageNo, int pageSize) {
+    public PaginatedBooks searchBooks(String searchKey, int pageNo, int pageSize) throws BookNotFoundException {
         List<BookResponseDto> finalResult = new ArrayList<>();
-        try {
-            List<Book> listByTitleAndISBN = bookRepo.searchByTitleAndISBN(searchKey, new Pagination(pageNo,pageSize));
-            List<User> userList = userRepo.searchByAuthor(searchKey);
-            List<Book> listByAuthor = new ArrayList<>();
-            userList.forEach(
-                    user -> {
-                        listByAuthor.add(bookRepo.findByAuthorId(user.getId(),new Pagination(pageNo,pageSize)));
-                    }
-            );
-            Set<Book> bookSet = new HashSet<>(listByTitleAndISBN);
-            bookSet.addAll(listByAuthor);
-            if(bookSet.size() == 0) {
-                throw new BookNotFoundException("Book Not Found For The Given Search Key");
-            }
-            List<Book> result = new ArrayList<>(bookSet);
-            result.forEach(
-                    book -> {
-                        finalResult.add(bookConvertor.convertToBookResponseDto(book));
-                    }
-            );
-        } catch (BookNotFoundException e) {
-            e.printStackTrace();
+        List<Book> listByTitleAndISBN = bookRepo.searchByTitleAndISBN(searchKey, new Pagination(pageNo,pageSize));
+        List<User> userList = userRepo.searchByAuthor(searchKey);
+        List<Book> listByAuthor = new ArrayList<>();
+        userList.forEach(
+                user -> {
+                    listByAuthor.add(bookRepo.findByAuthorId(user.getId(),new Pagination(pageNo,pageSize)));
+                }
+                );
+        Set<Book> bookSet = new HashSet<>(listByTitleAndISBN);
+        bookSet.addAll(listByAuthor);
+        if(bookSet.size() == 0) {
+            throw new BookNotFoundException("Book Not Found For The Given Search Key");
         }
+        List<Book> result = new ArrayList<>(bookSet);
+        result.forEach(
+                book -> {
+                    finalResult.add(bookConvertor.convertToBookResponseDto(book));
+                }
+            );
         return new PaginatedBooks(finalResult, (long) finalResult.size(),new Pagination(pageNo,pageSize));
     }
 }
