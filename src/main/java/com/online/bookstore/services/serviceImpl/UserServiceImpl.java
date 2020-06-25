@@ -23,10 +23,10 @@ public class UserServiceImpl implements UserServiceInterface {
     }
 
     @Override
-    public UserRequestDto addUser(UserRequestDto userRequestDto) {
+    public UserResponseDto addUser(UserRequestDto userRequestDto) {
         User user = userConvertor.convertToUser(userRequestDto);
         userRepo.save(user);
-        return userRequestDto;
+        return userConvertor.convertToUserDto(user);
     }
 
     @Override
