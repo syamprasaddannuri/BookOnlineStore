@@ -68,6 +68,9 @@ public class BookServiceTest {
         Assert.assertNotNull(book);
         Assert.assertEquals(book.getTitle(),"CLRS");
         Assert.assertEquals(book.getISBN(),"1");
+
+
+        System.out.println("shyam");
     }
 
     @Test(expected = BookNotFoundException.class)
