@@ -26,12 +26,12 @@ public class BookController {
     }
 
     @DeleteMapping (URIEndpoints.DELETE_BOOK)
-    public ResponseEntity deleteBook(@RequestParam("ISBN") String ISBN) throws BookNotFoundException {
-        return ResponseEntity.ok(bookServiceInterface.deleteBook(ISBN));
+    public void deleteBook(@RequestParam("ISBN") String ISBN) throws BookNotFoundException {
+        bookServiceInterface.deleteBook(ISBN);
     }
 
     @GetMapping
-    public ResponseEntity searchBook(@RequestParam ("searchKey") String searchKey, @RequestParam ("pageNo") int pageNo, @RequestParam ("pageSize") int pageSize) throws BookNotFoundException, UserNotFoundException {
+    public ResponseEntity searchBook(@RequestParam ("searchKey") String searchKey, @RequestParam ("pageNo") int pageNo, @RequestParam ("pageSize") int pageSize) throws BookNotFoundException {
         return ResponseEntity.ok(bookServiceInterface.searchBooks(searchKey,pageNo,pageSize));
     }
 }

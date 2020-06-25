@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface UserServiceInterface {
-    UserRequestDto addUser(UserRequestDto userRequestDto);
+    UserResponseDto addUser(UserRequestDto userRequestDto);
 
     UserResponseDto deleteUser(String id) throws UserNotFoundException;
 }

@@ -41,14 +41,12 @@ public class BookServiceImpl implements BookServiceInterface {
     }
 
     @Override
-    public BookResponseDto deleteBook(String isbn) throws BookNotFoundException {
+    public void deleteBook(String isbn) throws BookNotFoundException {
         Book book = bookRepo.findByISBN(isbn);
         if(book == null) {
             throw new BookNotFoundException("Book not found for given ISBN");
         }
         bookRepo.deleteBook(book);
-        bookRepo.save(book);
-        return bookConvertor.convertToBookResponseDto(book);
     }
 
     @Override
