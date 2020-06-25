@@ -59,23 +59,41 @@ Technologies:
 
 
 API’s:
+    
     Add Book : 
+        
         - This service is used to add the book.
+        
         - What does this service do ?
+            
             - Check whether the book is already present or not.
+            
             - If it is not present then create the book
+		       
 		        - POST method :
+			 	
 			 	-  Request URL : <Bookstore DNS>/api/book
+				
 				-  Request contains following information
+					
 					- ISBN of book
+					
 					- Title of book
+					
 					- Author of book
+					
 					- Description of book
+            
             -  Response contains following information 
+            
                     - ISBN of a book
+            
                     - Title of a book
+            
                     - author of a book
+            
                     - description about a book
+    
     Delete Book : 
 			     -  This service is used to delete the book
      -  What does this service do ?
