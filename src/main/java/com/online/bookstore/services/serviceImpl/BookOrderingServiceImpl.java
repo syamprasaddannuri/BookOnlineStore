@@ -1,5 +1,6 @@
 package com.online.bookstore.services.serviceImpl;
 
+import com.online.bookstore.dto.request.OrderRequest;
 import com.online.bookstore.dto.response.OrderResponse;
 import com.online.bookstore.dto.response.PriceResponseDto;
 import com.online.bookstore.enums.OrderStatus;
@@ -9,8 +10,10 @@ import com.online.bookstore.exception.InventoryNotAvailableException;
 import com.online.bookstore.exception.InventoryNotFoundException;
 import com.online.bookstore.model.Book;
 import com.online.bookstore.model.BookInventory;
+import com.online.bookstore.model.Order;
 import com.online.bookstore.model.Pricing;
 import com.online.bookstore.repositories.interfaces.BookRepoInterface;
+import com.online.bookstore.repositories.interfaces.OrderRepoInterface;
 import com.online.bookstore.services.BookInventoryServiceInterface;
 import com.online.bookstore.services.BookOrderingServiceInterface;
 import com.online.bookstore.services.PricingServiceInterface;
@@ -23,12 +26,14 @@ public class BookOrderingServiceImpl implements BookOrderingServiceInterface {
     private PricingServiceInterface pricingServiceInterface;
     private BookInventoryServiceInterface bookInventoryServiceInterface;
     private BookRepoInterface bookRepoInterface;
+    private OrderRepoInterface orderRepoInterface;
 
     @Autowired
-    public BookOrderingServiceImpl( BookInventoryServiceInterface bookInventoryServiceInterface, PricingServiceInterface pricingServiceInterface, BookRepoInterface bookRepoInterface) {
+    public BookOrderingServiceImpl( BookInventoryServiceInterface bookInventoryServiceInterface, PricingServiceInterface pricingServiceInterface, BookRepoInterface bookRepoInterface, OrderRepoInterface orderRepoInterface) {
         this.bookInventoryServiceInterface = bookInventoryServiceInterface;
         this.pricingServiceInterface = pricingServiceInterface;
         this.bookRepoInterface = bookRepoInterface;
+        this.orderRepoInterface = orderRepoInterface;
     }
 
     @Override
@@ -51,5 +56,15 @@ public class BookOrderingServiceImpl implements BookOrderingServiceInterface {
         orderResponse.setPricing(pricing);
         orderResponse.setOrderStatus(OrderStatus.Created);
         return orderResponse;
+    }
+
+    @Override
+    public Order storeOrderResponse(OrderRequest orderRequest) {
+        Order order = new Order();
+        order.setISBN(orderRequest.getISBN());
+        order.setOrderStatus(OrderStatus.Completed);
+        order.setPricing(orderRequest.getPricing());
+        orderRepoInterface.save(order);
+        return order;
     }
 }

@@ -1,6 +1,7 @@
 package com.online.bookstore.controller;
 
 import com.online.bookstore.constants.URIEndpoints;
+import com.online.bookstore.dto.request.OrderRequest;
 import com.online.bookstore.exception.BookNotAvailableException;
 import com.online.bookstore.exception.BookNotFoundException;
 import com.online.bookstore.exception.InventoryNotAvailableException;
@@ -24,5 +25,10 @@ public class BookOrderingController {
     @GetMapping
     public ResponseEntity buyBook(@RequestParam ("ISBN") String ISBN) throws BookNotAvailableException, BookNotFoundException, InventoryNotFoundException, InventoryNotAvailableException {
         return ResponseEntity.ok(bookOrderingServiceInterface.buyBook(ISBN));
+    }
+
+    @PostMapping
+    public ResponseEntity storeOrderResponse(@RequestBody OrderRequest orderRequest) {
+        return ResponseEntity.ok(bookOrderingServiceInterface.storeOrderResponse(orderRequest));
     }
 }
