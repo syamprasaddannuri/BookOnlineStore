@@ -6,6 +6,7 @@ import com.online.bookstore.dto.response.UserResponseDto;
 import com.online.bookstore.exception.UserNotFoundException;
 import com.online.bookstore.model.User;
 import com.online.bookstore.repositories.UserRepo;
+import com.online.bookstore.repositories.interfaces.UserRepoInterface;
 import com.online.bookstore.services.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,18 +15,18 @@ import org.springframework.stereotype.Service;
 public class UserServiceImpl implements UserServiceInterface {
 
     private UserConvertor userConvertor;
-    private UserRepo userRepo;
+    private UserRepoInterface userRepoInterface;
 
     @Autowired
-    public UserServiceImpl(UserConvertor userConvertor, UserRepo userRepo) {
+    public UserServiceImpl(UserConvertor userConvertor, UserRepoInterface userRepoInterface) {
         this.userConvertor = userConvertor;
-        this.userRepo = userRepo;
+        this.userRepoInterface = userRepoInterface;
     }
 
     @Override
     public UserResponseDto addUser(UserRequestDto userRequestDto) {
         User user = userConvertor.convertToUser(userRequestDto);
-        userRepo.save(user);
+        userRepoInterface.save(user);
         return userConvertor.convertToUserDto(user);
     }
 
@@ -33,11 +34,11 @@ public class UserServiceImpl implements UserServiceInterface {
     public UserResponseDto deleteUser(String id) {
         User user = null;
         try {
-            user = userRepo.getUserById(id);
+            user = userRepoInterface.getUserById(id);
             if(user == null) {
                 throw new UserNotFoundException("user not found for given id");
             }
-            userRepo.deleteUser(user);
+            userRepoInterface.deleteUser(user);
         } catch (UserNotFoundException e) {
             e.printStackTrace();
         }

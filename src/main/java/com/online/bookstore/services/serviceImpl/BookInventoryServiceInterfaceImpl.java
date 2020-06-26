@@ -3,7 +3,7 @@ package com.online.bookstore.services.serviceImpl;
 import com.online.bookstore.exception.InventoryNotAvailableException;
 import com.online.bookstore.exception.InventoryNotFoundException;
 import com.online.bookstore.model.BookInventory;
-import com.online.bookstore.repositories.BookInventoryRepo;
+import com.online.bookstore.repositories.interfaces.BookInventoryRepoInterface;
 import com.online.bookstore.services.BookInventoryServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -11,24 +11,24 @@ import org.springframework.stereotype.Service;
 @Service
 public class BookInventoryServiceInterfaceImpl implements BookInventoryServiceInterface {
 
-    private BookInventoryRepo bookInventoryRepo;
+    private BookInventoryRepoInterface bookInventoryRepoInterface;
 
     @Autowired
-    public BookInventoryServiceInterfaceImpl(BookInventoryRepo bookInventoryRepo) {
-        this.bookInventoryRepo = bookInventoryRepo;
+    public BookInventoryServiceInterfaceImpl(BookInventoryRepoInterface bookInventoryRepoInterface) {
+        this.bookInventoryRepoInterface = bookInventoryRepoInterface;
     }
 
     @Override
     public BookInventory addInventory(String isbn) {
-        BookInventory bookInventory = bookInventoryRepo.findByISBN(isbn);
+        BookInventory bookInventory = bookInventoryRepoInterface.findByISBN(isbn);
         if(bookInventory == null) {
             bookInventory.setCount(1);
             bookInventory.setISBN(isbn);
             bookInventory.setStatus(true);
-            bookInventoryRepo.save(bookInventory);
+            bookInventoryRepoInterface.save(bookInventory);
         } else {
             bookInventory.setCount(bookInventory.getCount() + 1);
-            bookInventoryRepo.save(bookInventory);
+            bookInventoryRepoInterface.save(bookInventory);
         }
         return bookInventory;
     }
@@ -37,7 +37,7 @@ public class BookInventoryServiceInterfaceImpl implements BookInventoryServiceIn
     public BookInventory getInventory(String isbn) {
         BookInventory bookInventory = null;
         try {
-            bookInventory = bookInventoryRepo.findByISBN(isbn);
+            bookInventory = bookInventoryRepoInterface.findByISBN(isbn);
             if(bookInventory == null) {
                 throw new InventoryNotFoundException("Inventory Not Found For Given ISBN");
             }
@@ -56,12 +56,12 @@ public class BookInventoryServiceInterfaceImpl implements BookInventoryServiceIn
     public BookInventory deleteInventory(String isbn) {
         BookInventory bookInventory = null;
         try {
-            bookInventory = bookInventoryRepo.findByISBN(isbn);
+            bookInventory = bookInventoryRepoInterface.findByISBN(isbn);
             if(bookInventory == null) {
                 throw new InventoryNotFoundException("Inventory Not Found For Given ISBN");
             }
             bookInventory.setStatus(false);
-            bookInventoryRepo.save(bookInventory);
+            bookInventoryRepoInterface.save(bookInventory);
         } catch (InventoryNotFoundException e) {
             e.printStackTrace();
         }
@@ -72,7 +72,7 @@ public class BookInventoryServiceInterfaceImpl implements BookInventoryServiceIn
     public BookInventory decrementInventory(String isbn) throws InventoryNotFoundException, InventoryNotAvailableException {
         BookInventory bookInventory = null;
         try {
-            bookInventory = bookInventoryRepo.findByISBN(isbn);
+            bookInventory = bookInventoryRepoInterface.findByISBN(isbn);
             if(bookInventory == null) {
                 throw new InventoryNotFoundException("Inventory Not Found For Given ISBN");
             }
@@ -80,7 +80,7 @@ public class BookInventoryServiceInterfaceImpl implements BookInventoryServiceIn
                 throw new InventoryNotAvailableException("Inventory not available for given ISBN");
             }
             bookInventory.setCount(bookInventory.getCount() - 1);
-            bookInventoryRepo.save(bookInventory);
+            bookInventoryRepoInterface.save(bookInventory);
         } catch (InventoryNotFoundException e) {
             e.printStackTrace();
         } catch (InventoryNotAvailableException e) {
