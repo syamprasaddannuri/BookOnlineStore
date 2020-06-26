@@ -9,12 +9,12 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class BookInventoryRepo implements BookInventoryRepoInterface {
+public class BookInventoryRepoImpl implements BookInventoryRepoInterface {
 
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    public BookInventoryRepo(MongoTemplate mongoTemplate) {
+    public BookInventoryRepoImpl(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 

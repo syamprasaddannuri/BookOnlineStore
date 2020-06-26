@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public interface BookInventoryServiceInterface {
     BookInventory addInventory(String isbn);
 
-    BookInventory getInventory(String isbn) throws InventoryNotFoundException;
+    BookInventory getInventory(String isbn) throws InventoryNotFoundException, InventoryNotAvailableException;
 
     BookInventory deleteInventory(String isbn) throws InventoryNotFoundException, InventoryNotAvailableException;
 

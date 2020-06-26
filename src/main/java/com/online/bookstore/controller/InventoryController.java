@@ -30,7 +30,7 @@ public class InventoryController {
     }
 
     @GetMapping(URIEndpoints.GET_INVENTORY)
-    public ResponseEntity getInventory (@RequestParam ("ISBN") String ISBN) throws InventoryNotFoundException {
+    public ResponseEntity getInventory (@RequestParam ("ISBN") String ISBN) throws InventoryNotFoundException, InventoryNotAvailableException {
         return ResponseEntity.ok(bookInventoryServiceInterface.getInventory(ISBN));
     }
 

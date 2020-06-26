@@ -5,7 +5,6 @@ import com.online.bookstore.dto.request.UserRequestDto;
 import com.online.bookstore.dto.response.UserResponseDto;
 import com.online.bookstore.exception.UserNotFoundException;
 import com.online.bookstore.model.User;
-import com.online.bookstore.repositories.UserRepo;
 import com.online.bookstore.repositories.interfaces.UserRepoInterface;
 import com.online.bookstore.services.UserServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,12 +30,12 @@ public class UserServiceImpl implements UserServiceInterface {
     }
 
     @Override
-    public UserResponseDto deleteUser(String id) {
+    public UserResponseDto deleteUser(String id){
         User user = null;
         try {
             user = userRepoInterface.getUserById(id);
             if(user == null) {
-                throw new UserNotFoundException("user not found for given id");
+                throw new UserNotFoundException("user not found for given postId");
             }
             userRepoInterface.deleteUser(user);
         } catch (UserNotFoundException e) {

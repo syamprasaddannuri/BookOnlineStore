@@ -12,33 +12,33 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class MediaData {
+public class MediaPost {
 
     @JsonProperty(value = "userId")
-    private Integer userId;
+    private Integer authorId;
 
     @JsonProperty(value = "id")
-    private Integer id;
+    private Integer postId;
 
     @JsonProperty(value = "title")
     private String title;
 
     @JsonProperty(value = "body")
-    private String body;
+    private String content;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof MediaData)) return false;
-        MediaData mediaData = (MediaData) o;
-        return Objects.equals(getUserId(), mediaData.getUserId()) &&
-                Objects.equals(getId(), mediaData.getId()) &&
-                Objects.equals(getTitle(), mediaData.getTitle()) &&
-                Objects.equals(getBody(), mediaData.getBody());
+        if (!(o instanceof MediaPost)) return false;
+        MediaPost mediaPost = (MediaPost) o;
+        return Objects.equals(getAuthorId(), mediaPost.getAuthorId()) &&
+                Objects.equals(getPostId(), mediaPost.getPostId()) &&
+                Objects.equals(getTitle(), mediaPost.getTitle()) &&
+                Objects.equals(getContent(), mediaPost.getContent());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUserId(), getId(), getTitle(), getBody());
+        return Objects.hash(getAuthorId(), getPostId(), getTitle(), getContent());
     }
 }

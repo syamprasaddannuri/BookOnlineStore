@@ -11,12 +11,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class UserRepo implements UserRepoInterface {
+public class UserRepoImpl implements UserRepoInterface {
 
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    public UserRepo(MongoTemplate mongoTemplate) {
+    public UserRepoImpl(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 

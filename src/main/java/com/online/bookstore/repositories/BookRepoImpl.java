@@ -15,12 +15,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public class BookRepo implements BookRepoInterface {
+public class BookRepoImpl implements BookRepoInterface {
 
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    public BookRepo(MongoTemplate mongoTemplate) {
+    public BookRepoImpl(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 

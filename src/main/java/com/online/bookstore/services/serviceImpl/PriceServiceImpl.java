@@ -5,7 +5,6 @@ import com.online.bookstore.dto.request.PricingRequestDto;
 import com.online.bookstore.dto.response.PriceResponseDto;
 import com.online.bookstore.exception.BookNotFoundException;
 import com.online.bookstore.model.Pricing;
-import com.online.bookstore.repositories.PricingRepo;
 import com.online.bookstore.repositories.interfaces.PricingRepoInterface;
 import com.online.bookstore.services.PricingServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;

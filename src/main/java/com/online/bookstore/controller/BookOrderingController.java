@@ -3,6 +3,8 @@ package com.online.bookstore.controller;
 import com.online.bookstore.constants.URIEndpoints;
 import com.online.bookstore.exception.BookNotAvailableException;
 import com.online.bookstore.exception.BookNotFoundException;
+import com.online.bookstore.exception.InventoryNotAvailableException;
+import com.online.bookstore.exception.InventoryNotFoundException;
 import com.online.bookstore.services.BookOrderingServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,7 @@ public class BookOrderingController {
     }
 
     @GetMapping
-    public ResponseEntity buyBook(@RequestParam ("ISBN") String ISBN) throws BookNotAvailableException {
+    public ResponseEntity buyBook(@RequestParam ("ISBN") String ISBN) throws BookNotAvailableException, BookNotFoundException, InventoryNotFoundException, InventoryNotAvailableException {
         return ResponseEntity.ok(bookOrderingServiceInterface.buyBook(ISBN));
     }
 }

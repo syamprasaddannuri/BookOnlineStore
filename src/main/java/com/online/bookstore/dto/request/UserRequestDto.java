@@ -14,7 +14,7 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class UserRequestDto {
 
-    @JsonProperty(value = "id")
+    @JsonProperty(value = "postId")
     private String id;
 
     @JsonProperty(value = "name")

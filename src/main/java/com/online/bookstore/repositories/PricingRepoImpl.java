@@ -11,12 +11,12 @@ import org.springframework.stereotype.Repository;
 
 
 @Repository
-public class PricingRepo implements PricingRepoInterface {
+public class PricingRepoImpl implements PricingRepoInterface {
 
     private MongoTemplate mongoTemplate;
 
     @Autowired
-    public PricingRepo(MongoTemplate mongoTemplate) {
+    public PricingRepoImpl(MongoTemplate mongoTemplate) {
         this.mongoTemplate = mongoTemplate;
     }
 

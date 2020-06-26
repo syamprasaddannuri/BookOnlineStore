@@ -4,7 +4,7 @@ import com.online.bookstore.convertor.UserConvertor;
 import com.online.bookstore.dto.request.UserRequestDto;
 import com.online.bookstore.dto.response.UserResponseDto;
 import com.online.bookstore.model.User;
-import com.online.bookstore.repositories.UserRepo;
+import com.online.bookstore.repositories.UserRepoImpl;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -28,14 +28,14 @@ public class UserServiceTest {
     private UserConvertor userConvertor;
 
     @Mock
-    private UserRepo userRepo;
+    private UserRepoImpl userRepoImpl;
 
     @Test
     public void addUser() {
         UserRequestDto userRequestDto = new UserRequestDto("1","virat",32,"9898989898","virat@gmail.com");
         User user = new User("1","virat",32,"9898989898","virat@gmail.com");
         UserResponseDto userResponseDto = new UserResponseDto("1","virat",32,"9898989898","virat@gmail.com");
-        when(userRepo.save(any())).thenReturn(user);
+        when(userRepoImpl.save(any())).thenReturn(user);
         when(userConvertor.convertToUserDto(any())).thenReturn(userResponseDto);
         userServiceInterface.addUser(userRequestDto);
         Assert.assertEquals(user.getName(),userResponseDto.getName());

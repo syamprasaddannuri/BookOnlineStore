@@ -55,7 +55,15 @@ Design and Architectural view:
         Database to store the book related data.
 
 Technologies:
+    
     Tools:
+        - Intellij IDE
+        - Mongo Compass
+    Technologies:
+        - Language: Java
+        - Framework: SpringBoot
+        - Database: MongoDB
+        - Operating System: MacOS
     
 Server Design
 
@@ -247,6 +255,37 @@ Server Design
                                 - ISBN
                                 - Price
                                 - Date
+        Buy Book :
+            - This service is used to buy the book from store
+            - What does this servide do ?
+                    - Checks whether book is available or not in inventory
+                    - If it is avaialable then returns book
+                    - If it is not available then reports an error
+                        - GET method :
+                        - Request URL : <Bookstore DNS>/api/ordering
+                        - Request contains following information
+                                - ISBN
+                        - Response contains following information
+                                - ISBN
+                                - Title
+                                - Author
+                                - Description
+                                - Status
+        Get Media Posts :
+            - This service is used to find the posts in media about the book
+            - What does this service do ?
+                    - Get the all media posts from media client.
+                    - Created inverted index for each word in all media posts.
+                    - Based on given search key it return all the posts using inverted index if any parital or full match.
+                        - GET method :
+                        - Request URL : <Bookstore DNS>/api/media
+                        - Request contains following information
+                                - ISBN
+                        - Response contains following information
+                                - User Id
+                                - Id 
+                                - Title
+                                - Body
     
         
                 
