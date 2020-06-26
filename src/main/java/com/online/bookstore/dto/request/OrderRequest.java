@@ -1,4 +1,4 @@
-package com.online.bookstore.dto.response;
+package com.online.bookstore.dto.request;
 
 import com.online.bookstore.enums.OrderStatus;
 import com.online.bookstore.model.Pricing;
@@ -11,7 +11,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderResponse {
+public class OrderRequest {
     private String id;
     private String ISBN;
     private Pricing pricing;

@@ -8,8 +8,8 @@ import com.online.bookstore.exception.BookNotFoundException;
 import com.online.bookstore.model.Book;
 import com.online.bookstore.model.Pagination;
 import com.online.bookstore.model.User;
-import com.online.bookstore.repositories.BookRepo;
-import com.online.bookstore.repositories.UserRepo;
+import com.online.bookstore.repositories.interfaces.BookRepoInterface;
+import com.online.bookstore.repositories.interfaces.UserRepoInterface;
 import com.online.bookstore.services.BookServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,42 +22,42 @@ import java.util.Set;
 @Service
 public class BookServiceImpl implements BookServiceInterface {
 
-    private BookRepo bookRepo;
+    private BookRepoInterface bookRepoInterface;
     private BookConvertor bookConvertor;
-    private UserRepo userRepo;
+    private UserRepoInterface userRepoInterface;
 
     @Autowired
-    public BookServiceImpl(BookRepo bookRepo, BookConvertor bookConvertor, UserRepo userRepo) {
-        this.bookRepo = bookRepo;
+    public BookServiceImpl(BookRepoInterface bookRepoInterface, BookConvertor bookConvertor, UserRepoInterface userRepoInterface) {
+        this.bookRepoInterface = bookRepoInterface;
         this.bookConvertor = bookConvertor;
-        this.userRepo = userRepo;
+        this.userRepoInterface = userRepoInterface;
     }
 
     @Override
     public BookResponseDto addBook(BookRequestDto bookRequestDto) {
         Book book = bookConvertor.convertToBook(bookRequestDto);
-        bookRepo.save(book);
+        bookRepoInterface.save(book);
         return bookConvertor.convertToBookResponseDto(book);
     }
 
     @Override
     public void deleteBook(String isbn) throws BookNotFoundException {
-        Book book = bookRepo.findByISBN(isbn);
+        Book book = bookRepoInterface.findByISBN(isbn);
         if(book == null) {
             throw new BookNotFoundException("Book not found for given ISBN");
         }
-        bookRepo.deleteBook(book);
+        bookRepoInterface.deleteBook(book);
     }
 
     @Override
     public PaginatedBooks searchBooks(String searchKey, int pageNo, int pageSize) throws BookNotFoundException {
         List<BookResponseDto> finalResult = new ArrayList<>();
-        List<Book> listByTitleAndISBN = bookRepo.searchByTitleAndISBN(searchKey, new Pagination(pageNo,pageSize));
-        List<User> userList = userRepo.searchByAuthor(searchKey);
+        List<Book> listByTitleAndISBN = bookRepoInterface.searchByTitleAndISBN(searchKey, new Pagination(pageNo,pageSize));
+        List<User> userList = userRepoInterface.searchByAuthor(searchKey);
         List<Book> listByAuthor = new ArrayList<>();
         userList.forEach(
                 user -> {
-                    listByAuthor.add(bookRepo.findByAuthorId(user.getId(),new Pagination(pageNo,pageSize)));
+                    listByAuthor.add(bookRepoInterface.findByAuthorId(user.getId(),new Pagination(pageNo,pageSize)));
                 }
                 );
         Set<Book> bookSet = new HashSet<>(listByTitleAndISBN);
