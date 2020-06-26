@@ -24,7 +24,7 @@ public class UserController {
     }
 
     @DeleteMapping(URIEndpoints.DELETE_USER)
-    public ResponseEntity deleteUser(@RequestParam ("postId") String id) throws UserNotFoundException {
+    public ResponseEntity deleteUser(@RequestParam ("Id") String id) throws UserNotFoundException {
         return ResponseEntity.ok(userServiceInterface.deleteUser(id));
     }
 }

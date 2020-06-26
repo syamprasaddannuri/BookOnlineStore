@@ -4,7 +4,9 @@ import com.online.bookstore.model.Order;
 import com.online.bookstore.repositories.interfaces.OrderRepoInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.stereotype.Repository;
 
+@Repository
 public class OrderRepoImpl implements OrderRepoInterface {
 
     private MongoTemplate mongoTemplate;

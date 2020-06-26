@@ -17,7 +17,7 @@ public class BookConvertor {
     public Book convertToBook(BookRequestDto bookRequestDto) {
         String author = bookRequestDto.getAuthor();
         User user = userRepoImpl.getByUserName(author);
-        Book book = new Book(bookRequestDto.getISBN(), bookRequestDto.getTitle(),user.getId(),bookRequestDto.getDescription());
+        Book book = new Book(bookRequestDto.getISBN(), bookRequestDto.getTitle(),user.getId(),bookRequestDto.getDescription(),bookRequestDto.getPrice());
         return book;
     }
 
@@ -25,7 +25,7 @@ public class BookConvertor {
         BookResponseDto bookResponseDto = null;
         if(book != null) {
             User user = userRepoImpl.getUserById(book.getAuthorId());
-            bookResponseDto = new BookResponseDto(book.getISBN(),book.getTitle(),user.getName(),book.getDescription());
+            bookResponseDto = new BookResponseDto(book.getISBN(),book.getTitle(),user.getName(),book.getDescription(),book.getPrice());
         }
         return bookResponseDto;
     }

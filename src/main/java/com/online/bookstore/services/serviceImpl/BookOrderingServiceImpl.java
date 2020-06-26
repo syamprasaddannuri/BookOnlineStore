@@ -2,7 +2,6 @@ package com.online.bookstore.services.serviceImpl;
 
 import com.online.bookstore.dto.request.OrderRequest;
 import com.online.bookstore.dto.response.OrderResponse;
-import com.online.bookstore.dto.response.PriceResponseDto;
 import com.online.bookstore.enums.OrderStatus;
 import com.online.bookstore.exception.BookNotAvailableException;
 import com.online.bookstore.exception.BookNotFoundException;
@@ -11,27 +10,23 @@ import com.online.bookstore.exception.InventoryNotFoundException;
 import com.online.bookstore.model.Book;
 import com.online.bookstore.model.BookInventory;
 import com.online.bookstore.model.Order;
-import com.online.bookstore.model.Pricing;
 import com.online.bookstore.repositories.interfaces.BookRepoInterface;
 import com.online.bookstore.repositories.interfaces.OrderRepoInterface;
 import com.online.bookstore.services.BookInventoryServiceInterface;
 import com.online.bookstore.services.BookOrderingServiceInterface;
-import com.online.bookstore.services.PricingServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class BookOrderingServiceImpl implements BookOrderingServiceInterface {
 
-    private PricingServiceInterface pricingServiceInterface;
     private BookInventoryServiceInterface bookInventoryServiceInterface;
     private BookRepoInterface bookRepoInterface;
     private OrderRepoInterface orderRepoInterface;
 
     @Autowired
-    public BookOrderingServiceImpl( BookInventoryServiceInterface bookInventoryServiceInterface, PricingServiceInterface pricingServiceInterface, BookRepoInterface bookRepoInterface, OrderRepoInterface orderRepoInterface) {
+    public BookOrderingServiceImpl( BookInventoryServiceInterface bookInventoryServiceInterface, BookRepoInterface bookRepoInterface, OrderRepoInterface orderRepoInterface) {
         this.bookInventoryServiceInterface = bookInventoryServiceInterface;
-        this.pricingServiceInterface = pricingServiceInterface;
         this.bookRepoInterface = bookRepoInterface;
         this.orderRepoInterface = orderRepoInterface;
     }
@@ -45,15 +40,11 @@ public class BookOrderingServiceImpl implements BookOrderingServiceInterface {
         if(bookInventory.getBookStatus().getType().equals("Not Available")) {
             throw new BookNotAvailableException("Book is not available for given isbn");
         }
-        PriceResponseDto priceResponseDto = pricingServiceInterface.getPriceForBook(isbn);
-        if(priceResponseDto == null) {
-            throw new BookNotFoundException("Book is not found");
-        }
+
         Book book = bookRepoInterface.findByISBN(bookInventory.getISBN());
-        Pricing pricing = new Pricing(priceResponseDto.getIsbn(),priceResponseDto.getPrice(),priceResponseDto.getDate());
         OrderResponse orderResponse = new OrderResponse();
         orderResponse.setISBN(book.getISBN());
-        orderResponse.setPricing(pricing);
+        orderResponse.setPrice(book.getPrice());
         orderResponse.setOrderStatus(OrderStatus.Created);
         return orderResponse;
     }
@@ -63,7 +54,7 @@ public class BookOrderingServiceImpl implements BookOrderingServiceInterface {
         Order order = new Order();
         order.setISBN(orderRequest.getISBN());
         order.setOrderStatus(OrderStatus.Completed);
-        order.setPricing(orderRequest.getPricing());
+        order.setPrice(orderRequest.getPrice());
         orderRepoInterface.save(order);
         return order;
     }

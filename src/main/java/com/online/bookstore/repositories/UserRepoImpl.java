@@ -21,7 +21,9 @@ public class UserRepoImpl implements UserRepoInterface {
     }
 
     @Override
-    public User save(User user) { return mongoTemplate.save(user); }
+    public User save(User user) {
+        return mongoTemplate.save(user);
+    }
 
     @Override
     public User getByUserName(String name) {

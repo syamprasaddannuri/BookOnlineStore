@@ -3,11 +3,13 @@ package com.online.bookstore.controller;
 import com.online.bookstore.constants.URIEndpoints;
 import com.online.bookstore.dto.request.BookRequestDto;
 import com.online.bookstore.exception.BookNotFoundException;
-import com.online.bookstore.exception.UserNotFoundException;
 import com.online.bookstore.services.BookServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
+
 
 @RestController
 @RequestMapping(URIEndpoints.ONLINE_BOOK_STORE_API)
@@ -21,7 +23,7 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity addBook(@RequestBody BookRequestDto bookRequestDto) {
+    public ResponseEntity addBook(@Valid @RequestBody BookRequestDto bookRequestDto) {
         return ResponseEntity.ok(bookServiceInterface.addBook(bookRequestDto));
     }
 
