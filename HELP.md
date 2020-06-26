@@ -68,7 +68,8 @@ Technologies:
 Server Design
 
     Class diagram:
-   ![alt text](ClassDiagram.png)
+   ![alt text](classdiagram.png)
+   ![alt_text](class_diagram.png)
     
     API’s:
         
@@ -274,18 +275,17 @@ Server Design
         Get Media Posts :
             - This service is used to find the posts in media about the book
             - What does this service do ?
-                    - Get the all media posts from media client.
-                    - Created inverted index for each word in all media posts.
-                    - Based on given search key it return all the posts using inverted index if any parital or full match.
+                    - It searches posts in map that has been created using scheduling.
+                    - All the matched posts has been returned
                         - GET method :
                         - Request URL : <Bookstore DNS>/api/media
                         - Request contains following information
                                 - ISBN
-                        - Response contains following information
-                                - User Id
-                                - Id 
+                        - Each Response from Media Posts contains following information
+                                - authorId
+                                - postId
                                 - Title
-                                - Body
+                                - content
     
         
                 
