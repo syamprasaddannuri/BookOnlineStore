@@ -1,6 +1,6 @@
 package com.online.bookstore.controller;
 
-import com.online.bookstore.constants.URIEndpoints;
+import com.online.bookstore.constants.UriEndpoints;
 import com.online.bookstore.dto.request.UserRequestDto;
 import com.online.bookstore.exception.UserNotFoundException;
 import com.online.bookstore.services.UserServiceInterface;
@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(URIEndpoints.USER_INFORMATION_API)
+@RequestMapping(UriEndpoints.USER_INFORMATION_API)
 public class UserController {
     private UserServiceInterface userServiceInterface;
 

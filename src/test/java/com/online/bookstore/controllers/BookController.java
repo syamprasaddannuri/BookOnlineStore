@@ -3,13 +3,13 @@ package com.online.bookstore.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.online.bookstore.dto.PaginatedBooks;
 import com.online.bookstore.dto.request.BookRequestDto;
+import com.online.bookstore.dto.request.BookStatusRequestDto;
 import com.online.bookstore.dto.response.BookResponseDto;
+import com.online.bookstore.enums.BookStatus;
 import com.online.bookstore.exception.BookNotFoundException;
 import com.online.bookstore.model.Book;
 import com.online.bookstore.model.Pagination;
-import com.online.bookstore.repositories.interfaces.BookRepoInterface;
 import com.online.bookstore.services.BookServiceInterface;
-import com.online.bookstore.services.serviceImpl.BookServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,6 +21,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,13 +51,15 @@ public class BookController {
     private BookRequestDto bookRequestDto;
     private BookResponseDto bookResponseDto;
     private PaginatedBooks paginatedBooks;
+    private BookStatusRequestDto bookStatusRequestDto;
     List<BookResponseDto> bookResponseDtoList = new ArrayList<>();
 
     @Before
     public void start() {
-        book = new Book("123","Maths","1","book to learn maths",10.5);
-        bookRequestDto = new BookRequestDto("123","Maths","shyam","book to learn maths",10.5);
-        bookResponseDto = new BookResponseDto("123","Maths","shyam","book to learn maths",10.5);
+        book = new Book("123","Maths","1","book to learn maths",10.5,BookStatus.Available);
+        bookRequestDto = new BookRequestDto("123","Maths","shyam","book to learn maths",10.5,BookStatus.Available);
+        bookResponseDto = new BookResponseDto("123","Maths","shyam","book to learn maths",10.5,BookStatus.Available);
+        bookStatusRequestDto = new BookStatusRequestDto("123",BookStatus.Available);
         bookResponseDtoList.add(bookResponseDto);
         Pagination pagination = new Pagination(0,10);
         paginatedBooks = new PaginatedBooks(bookResponseDtoList, (long) 1,pagination);
@@ -70,6 +73,16 @@ public class BookController {
                 .content(objectMapper.writeValueAsString(bookRequestDto))
                 .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    public void addBookShouldGiveBadRequest() throws Exception {
+        bookRequestDto = new BookRequestDto(null,"Maths","shyam","it's maths book",null, BookStatus.Available);
+        when(bookServiceInterface.addBook(any(BookRequestDto.class))).thenThrow(HttpClientErrorException.BadRequest.class);
+        mvc.perform(post("/api/book")
+                .content(objectMapper.writeValueAsString(bookRequestDto))
+                .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -100,6 +113,22 @@ public class BookController {
                 .andExpect(status().is4xxClientError());
     }
 
+    @Test
+    public void getStatusOfBook() throws Exception {
+        String status = "Available";
+        when(bookServiceInterface.getStatusOfBook(anyString())).thenReturn(status);
+        mvc.perform(get("/api/book/status")
+                .param("ISBN","123"))
+                .andExpect(status().isOk());
+    }
 
+    @Test
+    public void updateStatusOfBook() throws Exception {
+        when(bookServiceInterface.updateBookStatus(any(BookStatusRequestDto.class))).thenReturn(book);
+        mvc.perform(post("/api/book/update/status")
+                .content(objectMapper.writeValueAsString(bookStatusRequestDto))
+                .header(HttpHeaders.CONTENT_TYPE,MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    }
 
 }

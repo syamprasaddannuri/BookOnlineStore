@@ -1,13 +1,13 @@
 package com.online.bookstore.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.online.bookstore.enums.BookStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
-
+import javax.validation.constraints.NotNull;
 
 
 @Getter
@@ -16,22 +16,26 @@ import javax.validation.constraints.NotBlank;
 @NoArgsConstructor
 public class BookRequestDto {
     @JsonProperty(value = "ISBN")
-    @NotBlank(message = "ISBN cannot be null")
+    @NotNull(message = "ISBN cannot be null")
     private String ISBN;
 
     @JsonProperty(value = "title")
-    @NotBlank(message = "title cannot be null")
+    @NotNull(message = "title cannot be null")
     private String title;
 
     @JsonProperty(value = "author")
-    @NotBlank(message = "author cannot be null")
+    @NotNull(message = "author cannot be null")
     private String author;
 
     @JsonProperty(value = "description")
     private String description;
 
     @JsonProperty(value = "price")
-    @NotBlank(message = "price cannot be null")
+    @NotNull(message = "price cannot be null")
     private Double price;
+
+    @JsonProperty(value = "status")
+    @NotNull(message = "status cannot be null")
+    private BookStatus bookStatus;
 
 }

@@ -1,8 +1,9 @@
 package com.online.bookstore.constants;
 
-public class URIEndpoints {
+public class UriEndpoints {
     public static final String ONLINE_BOOK_STORE_API = "/api/book";
-    public static final String DELETE_BOOK = "/remove";
+    public static final String GET_STATUS = "/status";
+    public static final String UPDATE_BOOK_STATUS = "/update/status";
 
     public static final String USER_INFORMATION_API = "/api/user";
 

@@ -3,6 +3,7 @@ package com.online.bookstore.services.serviceImpl;
 import com.online.bookstore.convertor.BookConvertor;
 import com.online.bookstore.dto.PaginatedBooks;
 import com.online.bookstore.dto.request.BookRequestDto;
+import com.online.bookstore.dto.request.BookStatusRequestDto;
 import com.online.bookstore.dto.response.BookResponseDto;
 import com.online.bookstore.exception.BookNotFoundException;
 import com.online.bookstore.model.Book;
@@ -78,5 +79,26 @@ public class BookServiceImpl implements BookServiceInterface {
                 }
             );
         return new PaginatedBooks(finalResult, (long) finalResult.size(),new Pagination(pageNo,pageSize));
+    }
+
+    @Override
+    public String getStatusOfBook(String isbn) throws BookNotFoundException {
+        Book book = bookRepoInterface.findByISBN(isbn);
+        if(book == null) {
+            logger.error("Book not found for given ISBN");
+            throw new BookNotFoundException("Book not found for given ISBN");
+        }
+        return book.getBookStatus().toString();
+    }
+
+    @Override
+    public Book updateBookStatus(BookStatusRequestDto bookStatusRequestDto) throws BookNotFoundException {
+        Book book = bookRepoInterface.findByISBN(bookStatusRequestDto.getIsbn());
+        if(book == null) {
+            logger.error("Book not found for given ISBN");
+            throw new BookNotFoundException("Book not found for given ISBN");
+        }
+        book.setBookStatus(bookStatusRequestDto.getBookStatus());
+        return book;
     }
 }

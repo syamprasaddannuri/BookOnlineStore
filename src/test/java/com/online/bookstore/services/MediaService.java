@@ -1,6 +1,7 @@
 package com.online.bookstore.services;
 
 import com.online.bookstore.dto.MediaPost;
+import com.online.bookstore.enums.BookStatus;
 import com.online.bookstore.exception.BookNotFoundException;
 import com.online.bookstore.model.Book;
 import com.online.bookstore.repositories.interfaces.BookRepoInterface;
@@ -38,7 +39,7 @@ public class MediaService {
     @Before
     public void start() {
         mediaServiceInterface = new MediaServiceImpl(bookRepoInterface,mediaPostsCacheService);
-        book = new Book("123","Maths","1","It's a Maths Book",10.5);
+        book = new Book("123","Maths","1","It's a Maths Book",10.5, BookStatus.Available);
         mediaPost = new MediaPost(1,100,"Post On Maths","Book to learn maths in easy way");
         mediaPosts.add(mediaPost);
     }

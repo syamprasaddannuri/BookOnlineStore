@@ -5,6 +5,7 @@ import com.online.bookstore.dto.response.BookInventoryResponse;
 import com.online.bookstore.enums.BookStatus;
 import com.online.bookstore.enums.OrderStatus;
 import com.online.bookstore.exception.BookNotAvailableException;
+import com.online.bookstore.exception.BookNotFoundException;
 import com.online.bookstore.exception.InventoryNotFoundException;
 import com.online.bookstore.model.Book;
 import com.online.bookstore.model.BookInventory;
@@ -42,6 +43,9 @@ public class BookOrderingService {
     private BookInventoryRepoInterface bookInventoryRepoInterface;
 
     @MockBean
+    private BookServiceInterface bookServiceInterface;
+
+    @MockBean
     private BookRepoInterface bookRepoInterface;
 
     private Order order;
@@ -52,27 +56,41 @@ public class BookOrderingService {
 
     @Before
     public void start() {
-        bookOrderingServiceInterface = new BookOrderingServiceImpl(bookInventoryServiceInterface,bookRepoInterface,orderRepoInterface);
+        bookOrderingServiceInterface = new BookOrderingServiceImpl(bookInventoryServiceInterface,bookRepoInterface,orderRepoInterface,bookServiceInterface);
         order = new Order("1","123",10.5, OrderStatus.Created);
         orderRequest = new OrderRequest("1","123",10.5, OrderStatus.Created);
         bookInventoryResponse = new BookInventoryResponse("123",1);
-        book = new Book("123","Maths","1","Book To Learn Maths",10.5);
-        bookInventory = new BookInventory("123",10,BookStatus.Available);
+        book = new Book("123","Maths","1","Book To Learn Maths",10.5,BookStatus.Available);
+        bookInventory = new BookInventory("123",10);
     }
 
     @Test
-    public void buyBook() throws InventoryNotFoundException, BookNotAvailableException {
+    public void buyBook() throws InventoryNotFoundException, BookNotAvailableException, BookNotFoundException {
+        String status = "Available";
+        when(bookServiceInterface.getStatusOfBook(anyString())).thenReturn(status);
+        when(bookRepoInterface.findByISBN(anyString())).thenReturn(book);
         when(bookInventoryServiceInterface.getInventory(anyString())).thenReturn(bookInventoryResponse);
+        when(bookInventoryRepoInterface.findByISBN(anyString())).thenReturn(bookInventory);
+        bookOrderingServiceInterface.buyBook(anyString());
+    }
+
+    @Test(expected = InventoryNotFoundException.class)
+    public void buyBookShouldReturnBadRequest() throws InventoryNotFoundException, BookNotAvailableException, BookNotFoundException {
+        String status = "Available";
+        when(bookServiceInterface.getStatusOfBook(anyString())).thenReturn(status);
+        when(bookInventoryServiceInterface.getInventory(anyString())).thenThrow(new InventoryNotFoundException("Inventory Not Found"));
         when(bookInventoryRepoInterface.findByISBN(anyString())).thenReturn(bookInventory);
         when(bookRepoInterface.findByISBN(anyString())).thenReturn(book);
         bookOrderingServiceInterface.buyBook(anyString());
     }
 
-    @Test(expected = InventoryNotFoundException.class)
-    public void buyBookShouldReturnBadRequest() throws InventoryNotFoundException, BookNotAvailableException {
-        when(bookInventoryServiceInterface.getInventory(anyString())).thenThrow(new InventoryNotFoundException("Inventory Not Found"));
-        when(bookInventoryRepoInterface.findByISBN(anyString())).thenReturn(bookInventory);
+    @Test(expected = BookNotAvailableException.class)
+    public void buyBookShouldReturnBookNotAvailable() throws InventoryNotFoundException, BookNotAvailableException, BookNotFoundException {
+        String status = "NotAvailable";
+        when(bookServiceInterface.getStatusOfBook(anyString())).thenReturn(status).thenThrow(new BookNotAvailableException("Book is not available"));
         when(bookRepoInterface.findByISBN(anyString())).thenReturn(book);
+        when(bookInventoryServiceInterface.getInventory(anyString())).thenReturn(bookInventoryResponse);
+        when(bookInventoryRepoInterface.findByISBN(anyString())).thenReturn(bookInventory);
         bookOrderingServiceInterface.buyBook(anyString());
     }
 

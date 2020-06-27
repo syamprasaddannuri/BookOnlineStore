@@ -1,6 +1,5 @@
 package com.online.bookstore.model;
 
-import com.online.bookstore.enums.BookStatus;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -16,5 +15,4 @@ public class BookInventory {
     @Indexed(unique = true)
     private String ISBN;
     private int count;
-    private BookStatus bookStatus;
 }
