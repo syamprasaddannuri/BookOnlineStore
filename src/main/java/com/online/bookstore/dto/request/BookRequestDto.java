@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
+
 
 
 @Getter
@@ -30,7 +30,7 @@ public class BookRequestDto {
     @JsonProperty(value = "description")
     private String description;
 
-    @JsonProperty(value = "description")
+    @JsonProperty(value = "price")
     @NotBlank(message = "price cannot be null")
     private Double price;
 

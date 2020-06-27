@@ -25,7 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -58,8 +60,10 @@ public class BookServiceTest {
         bookRequestDto = new BookRequestDto("123","Algorithms","CLRS","It's Algorithms Book",10.5);
         book = new Book("1","CLRS","1","It's Algorithms Book",10.5);
         bookResponseDto = new BookResponseDto("1","CLRS","1","It's Algorithms Book",10.5);
-        bookResponseDtoList = new ArrayList<>();
         user = new User("1","shyam",25,"9502436232","shyam@gamil.com");
+        bookResponseDtoList.add(bookResponseDto);
+        bookList.add(book);
+        userList.add(user);
     }
 
     @Test
@@ -70,20 +74,17 @@ public class BookServiceTest {
         bookServiceInterface.addBook(bookRequestDto);
     }
 
-    @Test(expected = BookNotFoundException.class)
-    public void deleteBookIfNull() throws BookNotFoundException {
-        given(bookRepoInterface.findByISBN(any())).willAnswer(invocation ->{ return null;});
-        bookServiceInterface.deleteBook("1");
+    @Test
+    public void deleteBook() throws BookNotFoundException {
+        when(bookRepoInterface.findByISBN(anyString())).thenReturn(book);
+        doNothing().when(bookRepoInterface).deleteBook(book);
+        bookServiceInterface.deleteBook(anyString());
     }
 
     @Test
     public void searchBook() throws BookNotFoundException {
-        bookResponseDtoList.add(bookResponseDto);
-        bookList.add(book);
-        userList.add(user);
-        when(bookRepoInterface.save(any())).thenReturn(book);
         when(bookRepoInterface.searchByTitleAndISBN("CL",new Pagination(0,10))).thenReturn(bookList);
-        when(userRepoInterface.searchByAuthor("CL")).thenReturn(null);
+        when(userRepoInterface.searchByAuthor("CL")).thenReturn(userList);
         bookServiceInterface.searchBooks("CL",0,10);
     }
 

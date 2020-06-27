@@ -16,7 +16,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
@@ -48,6 +50,13 @@ public class UserServiceTest {
     public void addUser() {
         when(userConvertor.convertToUserDto(any())).thenReturn(userResponseDto);
         userServiceInterface.addUser(userRequestDto);
+    }
+
+    @Test
+    public void deleteUser() throws UserNotFoundException {
+        when(userRepoInterface.getUserById(anyString())).thenReturn(user);
+        doNothing().when(userRepoInterface).deleteUser(user);
+        userServiceInterface.deleteUser(anyString());
     }
 
     @Test(expected = UserNotFoundException.class)

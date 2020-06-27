@@ -30,12 +30,11 @@ public class UserServiceImpl implements UserServiceInterface {
     }
 
     @Override
-    public UserResponseDto deleteUser(String id) throws UserNotFoundException{
+    public void deleteUser(String id) throws UserNotFoundException{
         User user = userRepoInterface.getUserById(id);
         if(user == null) {
             throw new UserNotFoundException("user not found for given postId");
         }
         userRepoInterface.deleteUser(user);
-        return userConvertor.convertToUserDto(user);
     }
 }

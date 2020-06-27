@@ -1,7 +1,6 @@
 package com.online.bookstore.services;
 
 import com.online.bookstore.enums.BookStatus;
-import com.online.bookstore.exception.InventoryNotAvailableException;
 import com.online.bookstore.exception.InventoryNotFoundException;
 import com.online.bookstore.model.BookInventory;
 import com.online.bookstore.repositories.interfaces.BookInventoryRepoInterface;
@@ -10,7 +9,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -43,21 +41,21 @@ public class InventoryServiceTest {
     }
 
     @Test
-    public void getInventory() throws InventoryNotAvailableException, InventoryNotFoundException {
+    public void getInventory() throws InventoryNotFoundException {
         bookInventoryServiceInterface = new BookInventoryServiceInterfaceImpl(bookInventoryRepoInterface);
         when(bookInventoryRepoInterface.findByISBN(any())).thenReturn(bookInventory);
         bookInventoryServiceInterface.getInventory("123");
     }
 
     @Test(expected = InventoryNotFoundException.class)
-    public void addInventoryIfNull() throws InventoryNotAvailableException, InventoryNotFoundException {
+    public void addInventoryIfNull() throws InventoryNotFoundException {
         when(bookInventoryRepoInterface.save(any())).thenReturn(bookInventory);
         given(bookInventoryRepoInterface.findByISBN(any())).willAnswer(invocationOnMock -> { return null; });
         bookInventoryServiceInterface.getInventory("123");
     }
 
     @Test
-    public void decrementInventory() throws InventoryNotAvailableException, InventoryNotFoundException {
+    public void decrementInventory() throws InventoryNotFoundException {
         when(bookInventoryRepoInterface.findByISBN(any())).thenReturn(bookInventory);
         bookInventoryServiceInterface.decrementInventory("123");
     }

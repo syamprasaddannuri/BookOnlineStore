@@ -27,7 +27,6 @@ public class MediaServiceImpl implements MediaServiceInterface {
 
     @Override
     public List<MediaPost> getPostsByISBN(String ISBN)throws BookNotFoundException {
-        List<MediaPost> result = new ArrayList<>();
         Book book = bookRepoInterface.findByISBN(ISBN);
         if(book == null) {
             throw new BookNotFoundException("Book not found for given ISBN");

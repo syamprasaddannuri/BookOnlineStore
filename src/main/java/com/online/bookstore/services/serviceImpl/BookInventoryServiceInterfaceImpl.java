@@ -1,7 +1,7 @@
 package com.online.bookstore.services.serviceImpl;
 
+import com.online.bookstore.dto.response.BookInventoryResponse;
 import com.online.bookstore.enums.BookStatus;
-import com.online.bookstore.exception.InventoryNotAvailableException;
 import com.online.bookstore.exception.InventoryNotFoundException;
 import com.online.bookstore.model.BookInventory;
 import com.online.bookstore.repositories.interfaces.BookInventoryRepoInterface;
@@ -35,19 +35,20 @@ public class BookInventoryServiceInterfaceImpl implements BookInventoryServiceIn
     }
 
     @Override
-    public BookInventory getInventory(String isbn) throws InventoryNotFoundException, InventoryNotAvailableException{
+    public BookInventoryResponse getInventory(String isbn) throws InventoryNotFoundException {
         BookInventory bookInventory = bookInventoryRepoInterface.findByISBN(isbn);
         if(bookInventory == null) {
             throw new InventoryNotFoundException("Inventory Not Found For Given ISBN");
         }
-        if(bookInventory.getBookStatus().getType().equals("Not available")) {
-            throw new InventoryNotAvailableException("Inventory not available for given ISBN");
+        if (bookInventory.getBookStatus().equals(BookStatus.NotAvailable)) {
+            bookInventory.setCount(0);
         }
-        return bookInventory;
+        BookInventoryResponse bookInventoryResponse = new BookInventoryResponse(bookInventory.getISBN(),bookInventory.getCount());
+        return bookInventoryResponse;
     }
 
     @Override
-    public BookInventory deleteInventory(String isbn) throws InventoryNotFoundException, InventoryNotAvailableException{
+    public BookInventory deleteInventory(String isbn) throws InventoryNotFoundException{
         BookInventory bookInventory = bookInventoryRepoInterface.findByISBN(isbn);
         if(bookInventory == null) {
             throw new InventoryNotFoundException("Inventory Not Found For Given ISBN");
@@ -58,15 +59,16 @@ public class BookInventoryServiceInterfaceImpl implements BookInventoryServiceIn
     }
 
     @Override
-    public BookInventory decrementInventory(String isbn) throws InventoryNotFoundException, InventoryNotAvailableException{
+    public BookInventory decrementInventory(String isbn) throws InventoryNotFoundException{
         BookInventory bookInventory = bookInventoryRepoInterface.findByISBN(isbn);
         if(bookInventory == null) {
             throw new InventoryNotFoundException("Inventory Not Found For Given ISBN");
         }
-        if(bookInventory.getBookStatus().getType().equals("Not available")) {
-            throw new InventoryNotAvailableException("Inventory not available for given ISBN");
+        if(bookInventory.getBookStatus().equals(BookStatus.NotAvailable)) {
+            bookInventory.setCount(0);
+        } else {
+            bookInventory.setCount(bookInventory.getCount() - 1);
         }
-        bookInventory.setCount(bookInventory.getCount() - 1);
         bookInventoryRepoInterface.save(bookInventory);
         return bookInventory;
     }
