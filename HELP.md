@@ -68,8 +68,8 @@ Technologies:
 Server Design
 
     Class diagram:
-   ![alt text](Class%20Diagram.png)
-   ![alt_text](class_diagram.png)
+   ![alt text](classDiagram_1.png)
+   ![alt_text](Class_Diagram_2.png)
     
     API’s:
         

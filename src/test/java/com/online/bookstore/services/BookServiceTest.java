@@ -8,10 +8,11 @@ import com.online.bookstore.exception.BookNotFoundException;
 import com.online.bookstore.model.Book;
 import com.online.bookstore.model.Pagination;
 import com.online.bookstore.model.User;
-import com.online.bookstore.repositories.BookRepoImpl;
-import com.online.bookstore.repositories.UserRepoImpl;
+import com.online.bookstore.repositories.interfaces.BookRepoInterface;
+import com.online.bookstore.repositories.interfaces.UserRepoInterface;
+import com.online.bookstore.services.serviceImpl.BookServiceImpl;
 import lombok.extern.slf4j.Slf4j;
-import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -24,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -33,67 +35,57 @@ import static org.mockito.Mockito.when;
 @Slf4j
 public class BookServiceTest {
 
-    @Autowired
     private BookServiceInterface bookServiceInterface;
 
     @MockBean
     private BookConvertor bookConvertor;
 
     @Mock
-    private BookRepoImpl bookRepoImpl;
+    private BookRepoInterface bookRepoInterface;
 
     @Mock
-    private UserRepoImpl userRepoImpl;
+    private UserRepoInterface userRepoInterface;
 
+    private BookRequestDto bookRequestDto;
+    private Book book;
+    private BookResponseDto bookResponseDto;
+    private User user;
+    List<BookResponseDto> bookResponseDtoList = new ArrayList<>();
+    List<Book> bookList = new ArrayList<>();
+    List<User> userList = new ArrayList<>();
+
+    @Before
+    public void start() {
+        bookServiceInterface = new BookServiceImpl(bookRepoInterface, bookConvertor, userRepoInterface);
+        bookRequestDto = new BookRequestDto("123","Algorithms","CLRS","It's Algorithms Book",10.5);
+        book = new Book("1","CLRS","1","It's Algorithms Book",10.5);
+        bookResponseDto = new BookResponseDto("1","CLRS","1","It's Algorithms Book",10.5);
+        user = new User("1","shyam",25,"9502436232","shyam@gamil.com");
+        bookResponseDtoList.add(bookResponseDto);
+        bookList.add(book);
+        userList.add(user);
+    }
 
     @Test
     public void addBook() {
-        BookRequestDto bookRequestDto = new BookRequestDto("101","Algorithms","CLRS","It's Algorithms Book");
-        Book book = new Book("1","CLRS","1","It's Algorithms Book");
-        BookResponseDto bookResponseDto = new BookResponseDto("1","CLRS","1","It's Algorithms Book");
-        when(bookRepoImpl.save(any())).thenReturn(book);
+        when(bookRepoInterface.save(any())).thenReturn(book);
         when(bookConvertor.convertToBook(any())).thenReturn(book);
         when(bookConvertor.convertToBookResponseDto(book)).thenReturn(bookResponseDto);
         bookServiceInterface.addBook(bookRequestDto);
-        Assert.assertEquals(bookRequestDto.getDescription(),book.getDescription());
-        Assert.assertEquals(book.getTitle(),bookResponseDto.getTitle());
     }
 
     @Test
     public void deleteBook() throws BookNotFoundException {
-        Book book = new Book("1","CLRS","1","It's Algorithms Book");
-        when(bookRepoImpl.findByISBN(any())).thenReturn(book);
-        doNothing().when(bookRepoImpl).deleteBook(book);
-        bookServiceInterface.deleteBook("1");
-        Assert.assertNotNull(book);
-        Assert.assertEquals(book.getTitle(),"CLRS");
-        Assert.assertEquals(book.getISBN(),"1");
-    }
-
-    @Test(expected = BookNotFoundException.class)
-    public void deleteBookIfNull() throws BookNotFoundException {
-        given(bookRepoImpl.findByISBN(any())).willAnswer(invocation ->{ throw new BookNotFoundException("Book not found");});
-        bookServiceInterface.deleteBook("1");
+        when(bookRepoInterface.findByISBN(anyString())).thenReturn(book);
+        doNothing().when(bookRepoInterface).deleteBook(book);
+        bookServiceInterface.deleteBook(anyString());
     }
 
     @Test
     public void searchBook() throws BookNotFoundException {
-        BookResponseDto bookResponseDto = new BookResponseDto("1","CLRS","1","It's Algorithms Book");
-        Book book = new Book("1","CLRS","1","It's Algorithms Book");
-        List<BookResponseDto> bookResponseDtoList = new ArrayList<>();
-        bookResponseDtoList.add(bookResponseDto);
-        User user = new User("1","CLRS",50,"9999999999","CLRS@gamil.com");
-        PaginatedBooks paginatedBooks = new PaginatedBooks(bookResponseDtoList, (long) 1,new Pagination(0,10));
-        List<Book> bookList = new ArrayList<>();
-        List<User> userList = new ArrayList<>();
-        bookList.add(book);
-        userList.add(user);
-        when(bookRepoImpl.save(any())).thenReturn(book);
-        when(bookRepoImpl.searchByTitleAndISBN("CL",new Pagination(0,10))).thenReturn(bookList);
-        when(userRepoImpl.searchByAuthor("CL")).thenReturn(userList);
+        when(bookRepoInterface.searchByTitleAndISBN("CL",new Pagination(0,10))).thenReturn(bookList);
+        when(userRepoInterface.searchByAuthor("CL")).thenReturn(userList);
         bookServiceInterface.searchBooks("CL",0,10);
-        Assert.assertEquals(paginatedBooks.getBookList().get(0).getTitle(),"CLRS");
-        Assert.assertEquals(paginatedBooks.getCount(),"1");
     }
 
 }

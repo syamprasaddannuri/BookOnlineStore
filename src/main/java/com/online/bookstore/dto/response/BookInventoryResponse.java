@@ -1,6 +1,5 @@
 package com.online.bookstore.dto.response;
 
-import com.online.bookstore.enums.OrderStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +9,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class OrderResponse {
-    private String id;
+public class BookInventoryResponse {
     private String ISBN;
-    private double price;
-    private OrderStatus orderStatus;
+    private int count;
 }

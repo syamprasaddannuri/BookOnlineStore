@@ -5,7 +5,6 @@ public class URIEndpoints {
     public static final String DELETE_BOOK = "/remove";
 
     public static final String USER_INFORMATION_API = "/api/user";
-    public static final String DELETE_USER = "/remove";
 
     public static final String MEDIA_INFORMATION = "/api/media";
 

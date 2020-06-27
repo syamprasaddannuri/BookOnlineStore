@@ -12,4 +12,5 @@ public class BookResponseDto {
     private String title;
     private String author;
     private String description;
+    private double price;
 }

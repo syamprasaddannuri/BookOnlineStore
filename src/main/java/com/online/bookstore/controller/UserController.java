@@ -23,8 +23,8 @@ public class UserController {
         return ResponseEntity.ok(userServiceInterface.addUser(userRequestDto));
     }
 
-    @DeleteMapping(URIEndpoints.DELETE_USER)
-    public ResponseEntity deleteUser(@RequestParam ("postId") String id) throws UserNotFoundException {
-        return ResponseEntity.ok(userServiceInterface.deleteUser(id));
+    @DeleteMapping
+    public void deleteUser(@RequestParam ("Id") String id) throws UserNotFoundException {
+        userServiceInterface.deleteUser(id);
     }
 }

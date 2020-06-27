@@ -1,9 +1,8 @@
 package com.online.bookstore.repositories;
 
-import com.online.bookstore.dto.PaginatedBooks;
+import com.mongodb.client.result.DeleteResult;
 import com.online.bookstore.model.Book;
 import com.online.bookstore.model.Pagination;
-import com.online.bookstore.model.User;
 import com.online.bookstore.repositories.interfaces.BookRepoInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;

@@ -17,6 +17,6 @@ public class Order {
     @Id
     private String id;
     private String ISBN;
-    private Pricing pricing;
+    private double price;
     private OrderStatus orderStatus;
 }

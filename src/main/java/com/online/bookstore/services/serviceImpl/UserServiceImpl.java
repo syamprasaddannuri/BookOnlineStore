@@ -7,6 +7,8 @@ import com.online.bookstore.exception.UserNotFoundException;
 import com.online.bookstore.model.User;
 import com.online.bookstore.repositories.interfaces.UserRepoInterface;
 import com.online.bookstore.services.UserServiceInterface;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ public class UserServiceImpl implements UserServiceInterface {
 
     private UserConvertor userConvertor;
     private UserRepoInterface userRepoInterface;
+
+    static final Logger logger = LogManager.getLogger(UserServiceImpl.class.getName());
 
     @Autowired
     public UserServiceImpl(UserConvertor userConvertor, UserRepoInterface userRepoInterface) {
@@ -30,17 +34,12 @@ public class UserServiceImpl implements UserServiceInterface {
     }
 
     @Override
-    public UserResponseDto deleteUser(String id){
-        User user = null;
-        try {
-            user = userRepoInterface.getUserById(id);
-            if(user == null) {
-                throw new UserNotFoundException("user not found for given postId");
-            }
-            userRepoInterface.deleteUser(user);
-        } catch (UserNotFoundException e) {
-            e.printStackTrace();
+    public void deleteUser(String id) throws UserNotFoundException{
+        User user = userRepoInterface.getUserById(id);
+        if(user == null) {
+            logger.error("user not found for given postId");
+            throw new UserNotFoundException("user not found for given postId");
         }
-        return userConvertor.convertToUserDto(user);
+        userRepoInterface.deleteUser(user);
     }
 }

@@ -3,41 +3,65 @@ package com.online.bookstore.services;
 import com.online.bookstore.convertor.UserConvertor;
 import com.online.bookstore.dto.request.UserRequestDto;
 import com.online.bookstore.dto.response.UserResponseDto;
+import com.online.bookstore.exception.UserNotFoundException;
 import com.online.bookstore.model.User;
-import com.online.bookstore.repositories.UserRepoImpl;
-import org.junit.Assert;
+import com.online.bookstore.repositories.interfaces.UserRepoInterface;
+import com.online.bookstore.services.serviceImpl.UserServiceImpl;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 @SpringBootTest
 @RunWith(SpringRunner.class)
 public class UserServiceTest {
 
-    @Autowired
     private UserServiceInterface userServiceInterface;
 
     @MockBean
     private UserConvertor userConvertor;
 
     @Mock
-    private UserRepoImpl userRepoImpl;
+    private UserRepoInterface userRepoInterface;
+
+    private UserRequestDto userRequestDto;
+    private User user;
+    private UserResponseDto userResponseDto;
+
+
+    @Before
+    public void start() {
+        userServiceInterface = new UserServiceImpl(userConvertor,userRepoInterface);
+        userRequestDto = new UserRequestDto("1","satheesh",32,"9908422660","satheesh@gmail.com");
+        user = new User("1","satheesh",32,"9908422660","satheesh@gmail.com");
+        userResponseDto = new UserResponseDto("1","satheesh",32,"9908422660","satheesh@gmail.com");
+    }
 
     @Test
     public void addUser() {
-        UserRequestDto userRequestDto = new UserRequestDto("1","virat",32,"9898989898","virat@gmail.com");
-        User user = new User("1","virat",32,"9898989898","virat@gmail.com");
-        UserResponseDto userResponseDto = new UserResponseDto("1","virat",32,"9898989898","virat@gmail.com");
-        when(userRepoImpl.save(any())).thenReturn(user);
         when(userConvertor.convertToUserDto(any())).thenReturn(userResponseDto);
         userServiceInterface.addUser(userRequestDto);
-        Assert.assertEquals(user.getName(),userResponseDto.getName());
+    }
+
+    @Test
+    public void deleteUser() throws UserNotFoundException {
+        when(userRepoInterface.getUserById(anyString())).thenReturn(user);
+        doNothing().when(userRepoInterface).deleteUser(user);
+        userServiceInterface.deleteUser(anyString());
+    }
+
+    @Test(expected = UserNotFoundException.class)
+    public void deleteUserIfNull() throws UserNotFoundException {
+        given(userRepoInterface.getUserById(any())).willAnswer(invocationOnMock -> { return null; });
+        userServiceInterface.deleteUser("1");
     }
 }
