@@ -57,7 +57,7 @@ public class BookOrderingService {
         orderRequest = new OrderRequest("1","123",10.5, OrderStatus.Created);
         bookInventoryResponse = new BookInventoryResponse("123",1);
         book = new Book("123","Maths","1","Book To Learn Maths",10.5);
-        bookInventory = new BookInventory("1","123",10,BookStatus.Available);
+        bookInventory = new BookInventory("123",10,BookStatus.Available);
     }
 
     @Test

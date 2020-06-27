@@ -13,7 +13,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "BookInventory")
 public class BookInventory {
     @Id
-    private String id;
     @Indexed(unique = true)
     private String ISBN;
     private int count;

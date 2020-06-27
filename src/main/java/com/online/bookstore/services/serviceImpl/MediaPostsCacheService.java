@@ -1,4 +1,4 @@
-package com.online.bookstore.services;
+package com.online.bookstore.services.serviceImpl;
 
 import com.online.bookstore.dto.MediaPost;
 import org.springframework.beans.factory.annotation.Value;

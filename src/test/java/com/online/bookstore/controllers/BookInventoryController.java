@@ -35,7 +35,7 @@ public class BookInventoryController {
 
     @Before
     public void start() {
-        bookInventory = new BookInventory("1","123",10, BookStatus.Available);
+        bookInventory = new BookInventory("123",10, BookStatus.Available);
         bookInventoryResponse = new BookInventoryResponse("123",10);
     }
 
@@ -73,7 +73,7 @@ public class BookInventoryController {
 
     @Test
     public void getInventoryShouldReturnBadRequest() throws Exception {
-        when(bookInventoryServiceInterface.getInventory(anyString())).thenThrow(new InventoryNotFoundException(""));
+        when(bookInventoryServiceInterface.getInventory(anyString())).thenThrow(new InventoryNotFoundException("Inventory not found for given isbn"));
         mockMvc.perform(get("/api/inventory/getInventory")
                 .param("ISBN","123"))
                 .andExpect(status().is4xxClientError());

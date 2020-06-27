@@ -11,6 +11,8 @@ import com.online.bookstore.model.User;
 import com.online.bookstore.repositories.interfaces.BookRepoInterface;
 import com.online.bookstore.repositories.interfaces.UserRepoInterface;
 import com.online.bookstore.services.BookServiceInterface;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +27,8 @@ public class BookServiceImpl implements BookServiceInterface {
     private BookRepoInterface bookRepoInterface;
     private BookConvertor bookConvertor;
     private UserRepoInterface userRepoInterface;
+
+    static final Logger logger = LogManager.getLogger(BookServiceImpl.class.getName());
 
     @Autowired
     public BookServiceImpl(BookRepoInterface bookRepoInterface, BookConvertor bookConvertor, UserRepoInterface userRepoInterface) {
@@ -44,6 +48,7 @@ public class BookServiceImpl implements BookServiceInterface {
     public void deleteBook(String isbn) throws BookNotFoundException {
         Book book = bookRepoInterface.findByISBN(isbn);
         if(book == null) {
+            logger.error("Book not found for given ISBN");
             throw new BookNotFoundException("Book not found for given ISBN");
         }
         bookRepoInterface.deleteBook(book);
@@ -63,6 +68,7 @@ public class BookServiceImpl implements BookServiceInterface {
         Set<Book> bookSet = new HashSet<>(listByTitleAndISBN);
         bookSet.addAll(listByAuthor);
         if(bookSet.size() == 0) {
+            logger.error("Book Not Found For The Given Search Key");
             throw new BookNotFoundException("Book Not Found For The Given Search Key");
         }
         List<Book> result = new ArrayList<>(bookSet);

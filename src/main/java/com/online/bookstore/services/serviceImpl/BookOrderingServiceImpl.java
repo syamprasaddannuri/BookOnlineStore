@@ -12,6 +12,8 @@ import com.online.bookstore.repositories.interfaces.BookRepoInterface;
 import com.online.bookstore.repositories.interfaces.OrderRepoInterface;
 import com.online.bookstore.services.BookInventoryServiceInterface;
 import com.online.bookstore.services.BookOrderingServiceInterface;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,8 @@ public class BookOrderingServiceImpl implements BookOrderingServiceInterface {
     private BookInventoryServiceInterface bookInventoryServiceInterface;
     private BookRepoInterface bookRepoInterface;
     private OrderRepoInterface orderRepoInterface;
+
+    static final Logger logger = LogManager.getLogger(BookOrderingServiceImpl.class.getName());
 
     @Autowired
     public BookOrderingServiceImpl( BookInventoryServiceInterface bookInventoryServiceInterface, BookRepoInterface bookRepoInterface, OrderRepoInterface orderRepoInterface) {
@@ -33,9 +37,11 @@ public class BookOrderingServiceImpl implements BookOrderingServiceInterface {
     public OrderResponse buyBook(String isbn) throws InventoryNotFoundException,BookNotAvailableException {
         BookInventoryResponse bookInventoryResponse = bookInventoryServiceInterface.getInventory(isbn);
         if(bookInventoryResponse == null) {
+            logger.error("Book Inventory not found for the given isbn");
             throw new InventoryNotFoundException("Book Inventory not found for the given isbn");
         }
         if(bookInventoryResponse.getCount() == 0) {
+            logger.error("Book is Not Available");
             throw new BookNotAvailableException("Book is Not Available");
         }
         Book book = bookRepoInterface.findByISBN(bookInventoryResponse.getISBN());

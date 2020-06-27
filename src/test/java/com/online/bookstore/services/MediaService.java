@@ -4,6 +4,7 @@ import com.online.bookstore.dto.MediaPost;
 import com.online.bookstore.exception.BookNotFoundException;
 import com.online.bookstore.model.Book;
 import com.online.bookstore.repositories.interfaces.BookRepoInterface;
+import com.online.bookstore.services.serviceImpl.MediaPostsCacheService;
 import com.online.bookstore.services.serviceImpl.MediaServiceImpl;
 import org.junit.Before;
 import org.junit.Test;

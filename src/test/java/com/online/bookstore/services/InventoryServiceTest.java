@@ -30,7 +30,7 @@ public class InventoryServiceTest {
     @Before
     public void start() {
         bookInventoryServiceInterface = new BookInventoryServiceInterfaceImpl(bookInventoryRepoInterface);
-        bookInventory = new BookInventory("1","123",1, BookStatus.Available);
+        bookInventory = new BookInventory("123",1, BookStatus.Available);
     }
 
     @Test

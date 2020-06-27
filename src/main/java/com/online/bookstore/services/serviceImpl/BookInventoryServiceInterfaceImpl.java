@@ -6,6 +6,8 @@ import com.online.bookstore.exception.InventoryNotFoundException;
 import com.online.bookstore.model.BookInventory;
 import com.online.bookstore.repositories.interfaces.BookInventoryRepoInterface;
 import com.online.bookstore.services.BookInventoryServiceInterface;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,8 @@ import org.springframework.stereotype.Service;
 public class BookInventoryServiceInterfaceImpl implements BookInventoryServiceInterface {
 
     private BookInventoryRepoInterface bookInventoryRepoInterface;
+
+    static final Logger logger = LogManager.getLogger(BookInventoryServiceInterface.class.getName());
 
     @Autowired
     public BookInventoryServiceInterfaceImpl(BookInventoryRepoInterface bookInventoryRepoInterface) {
@@ -38,6 +42,7 @@ public class BookInventoryServiceInterfaceImpl implements BookInventoryServiceIn
     public BookInventoryResponse getInventory(String isbn) throws InventoryNotFoundException {
         BookInventory bookInventory = bookInventoryRepoInterface.findByISBN(isbn);
         if(bookInventory == null) {
+            logger.error("Inventory Not Found For Given ISBN");
             throw new InventoryNotFoundException("Inventory Not Found For Given ISBN");
         }
         if (bookInventory.getBookStatus().equals(BookStatus.NotAvailable)) {
@@ -51,6 +56,7 @@ public class BookInventoryServiceInterfaceImpl implements BookInventoryServiceIn
     public BookInventory deleteInventory(String isbn) throws InventoryNotFoundException{
         BookInventory bookInventory = bookInventoryRepoInterface.findByISBN(isbn);
         if(bookInventory == null) {
+            logger.error("Inventory Not Found For Given ISBN");
             throw new InventoryNotFoundException("Inventory Not Found For Given ISBN");
         }
         bookInventory.setBookStatus(BookStatus.NotAvailable);
@@ -62,6 +68,7 @@ public class BookInventoryServiceInterfaceImpl implements BookInventoryServiceIn
     public BookInventory decrementInventory(String isbn) throws InventoryNotFoundException{
         BookInventory bookInventory = bookInventoryRepoInterface.findByISBN(isbn);
         if(bookInventory == null) {
+            logger.error("Inventory Not Found For Given ISBN");
             throw new InventoryNotFoundException("Inventory Not Found For Given ISBN");
         }
         if(bookInventory.getBookStatus().equals(BookStatus.NotAvailable)) {
