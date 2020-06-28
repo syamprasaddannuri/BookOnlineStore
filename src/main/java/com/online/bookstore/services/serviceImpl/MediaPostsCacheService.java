@@ -25,19 +25,19 @@ public class MediaPostsCacheService {
                 mediaPost -> {
                     String title = mediaPost.getTitle();
                     String description = mediaPost.getContent();
-                    String[] titleArray = title.split(" ");
+                    String[] titleWords = title.split(" ");
 
-                    for(int i = 0 ; i < titleArray.length ; i++) {
-                        Set<MediaPost> set = map.getOrDefault(titleArray[i], new HashSet<>());
+                    for(int i = 0 ; i < titleWords.length ; i++) {
+                        Set<MediaPost> set = map.getOrDefault(titleWords[i], new HashSet<>());
                         set.add(mediaPost);
-                        map.put(titleArray[i],set);
+                        map.put(titleWords[i],set);
                     }
 
-                    String[] descriptionArray = description.split(" ");
-                    for(int i = 0 ; i < descriptionArray.length ; i++) {
-                        Set<MediaPost> set = map.getOrDefault(titleArray[i], new HashSet<>());
+                    String[] descriptionWords = description.split(" ");
+                    for(int i = 0 ; i < descriptionWords.length ; i++) {
+                        Set<MediaPost> set = map.getOrDefault(titleWords[i], new HashSet<>());
                         set.add(mediaPost);
-                        map.put(titleArray[i],set);
+                        map.put(titleWords[i],set);
                     }
                 }
         );

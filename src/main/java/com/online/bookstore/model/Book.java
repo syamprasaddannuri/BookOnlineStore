@@ -1,10 +1,11 @@
 package com.online.bookstore.model;
 
+import com.online.bookstore.enums.BookStatus;
 import lombok.*;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotNull;
 import java.util.Objects;
 
 @Getter
@@ -14,12 +15,21 @@ import java.util.Objects;
 @Document(collection = "Book")
 public class Book {
     @Id
-    @Indexed(unique = true)
+    @NotNull
     private String ISBN;
+
+    @NotNull
     private String title;
-    private String authorId;
+
+    @NotNull
+    private String author;
+
     private String description;
+
+    @NotNull
     private double price;
+
+    private BookStatus bookStatus;
 
     @Override
     public boolean equals(Object o) {
@@ -31,6 +41,6 @@ public class Book {
 
     @Override
     public int hashCode() {
-        return Objects.hash(getISBN(), getTitle(), getAuthorId());
+        return Objects.hash(getISBN(), getTitle(), getAuthor());
     }
 }

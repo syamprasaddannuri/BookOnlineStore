@@ -9,6 +9,4 @@ public interface BookInventoryRepoInterface {
     BookInventory save(BookInventory bookInventory);
 
     BookInventory findByISBN(String isbn);
-
-    void deleteBookInventory(BookInventory bookInventory);
 }
