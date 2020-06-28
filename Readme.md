@@ -23,6 +23,7 @@ Book store service Design
     5. Server design
             5.1: Class diagram
             5.2: API's
+    6. Metrics and alerting
 ---------------------------------------------------------------------------------------------------------------------------
 Objective:
     
@@ -193,9 +194,45 @@ Server Design
                                 - postId
                                 - Title
                                 - content
-                                  
-    
-        
+Metrics and Alerting
+   
+    Metrics
+        Infra metrics
+            - CPU usage %
+            - RAM usage %
+            - Disk usage %
+            - Network usage %
+        Health check for book store service
+        Load related metrics
+            - Request count on
+                - addBook API
+                - deleteBook API
+                - searchBook API
+                - updateInventory API
+                - Search media posts API
+        Error related metrics
+            - Number of 5XX errors
+            - Number of 4XX errors
+        Latency related metrics for following API's
+            - addBook API
+            - deleteBook API
+            - searchBook API
+            - updateInventory API
+            - Search media posts API
+        MongoDB metrics
+            - Read latency for
+                - getting Book by ISBN
+                - search Books document by title, autthor and description
+                - get inventory by ISBN
+                - get order by Orer Id
+            - Write latency for
+                - add Book
+                - update Book
+                - Add/Remove Inventory
+                - Create Order
+    Alerting
+        - Alerting setup on all the above metrics if the cross the threshold configured.
+     
                 
     
     
