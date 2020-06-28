@@ -124,7 +124,6 @@ public class BookController {
     @Test
     public void searchBookShouldReturnBadRequest() throws Exception {
            mvc.perform(get("/api/book")
-                .param("searchKey",null)
                 .param("pageNo","0")
                 .param("pageSize","10"))
                 .andExpect(status().isBadRequest());

@@ -11,4 +11,5 @@ public class UriEndpoints {
 
     public static final String INVENTORY_API = "/api/inventory";
     public static final String GET_INVENTORY = "/getInventory";
+    public static final String PING = "/ping";
 }

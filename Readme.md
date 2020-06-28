@@ -1,12 +1,15 @@
 Deployment instructions:
     
+    - Clone the repository:
+        - $git clone git@github.com:syamprasaddannuri/BookOnlineStore.git
     - Install docker
+        - Please find the instructions here: https://docs.docker.com/get-docker/
     - Build docker image :
         - Move to the to source repository in terminal
         - Run the following commands
             - $docker build -t springio/gs-spring-boot-docker .
             - $docker run -p 8080:8080 springio/gs-spring-boot-docker
-        - After completing the above steps service get's deployed in docker and accessble at 8080 port.
+        - After completing the above steps service get's deployed in docker(if installed) and accessble at 8080 port.
         
 Book store service Design
    
@@ -16,9 +19,10 @@ Book store service Design
     3. Design and Architectural view
         3.1: High level architecture
         3.2: Technologies
-    5.Server design
-        5.1: Class diagram
-        5.2: API's
+    4. Data Model
+    5. Server design
+            5.1: Class diagram
+            5.2: API's
 ---------------------------------------------------------------------------------------------------------------------------
 Objective:
     
@@ -69,11 +73,14 @@ Technologies:
         - Framework: SpringBoot
         - Database: MongoDB
         - Operating System: MacOS
+        
+Data Model:
+ ![alt text](DataModel.png)
     
 Server Design
 
     Class diagram:
-   ![alt text](Final_Class_Diagram.png)
+   ![alt text](Classdiagram.png)
     
     API’s:
         
@@ -186,6 +193,7 @@ Server Design
                                 - postId
                                 - Title
                                 - content
+                                  
     
         
                 

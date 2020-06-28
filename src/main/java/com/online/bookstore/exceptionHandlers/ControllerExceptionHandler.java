@@ -1,4 +1,4 @@
-package com.online.bookstore.ExceptionHandlers;
+package com.online.bookstore.exceptionHandlers;
 
 import com.mongodb.DuplicateKeyException;
 import com.online.bookstore.exception.BookNotFoundException;

@@ -7,11 +7,13 @@ import com.online.bookstore.exception.InsufficientInventory;
 import com.online.bookstore.exception.InventoryNotFoundException;
 import com.online.bookstore.model.Book;
 import com.online.bookstore.model.BookInventory;
+import com.online.bookstore.model.Order;
 import com.online.bookstore.repositories.interfaces.BookInventoryRepoInterface;
 import com.online.bookstore.repositories.interfaces.BookRepoInterface;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -22,7 +24,7 @@ import static org.mockito.Mockito.when;
 @RunWith(SpringRunner.class)
 public class BookOrderingService {
 
-    @MockBean
+    @Autowired
     private BookOrderingServiceInterface bookOrderingServiceInterface;
 
     @MockBean
@@ -43,7 +45,7 @@ public class BookOrderingService {
     @Before
     public void start() {
         book = new Book("123","Maths","1","Book To Learn Maths",10.5,BookStatus.Available);
-        bookInventory = new BookInventory("123",1, 10);
+        bookInventory = new BookInventory("123",4, 10);
     }
 
     @Test
@@ -54,20 +56,28 @@ public class BookOrderingService {
         bookOrderingServiceInterface.buyBook("123", 2);
     }
 
+    @Test(expected = InsufficientInventory.class)
+    public void buyBookShouldFailWithInsufficientInventory() throws InventoryNotFoundException, BookNotAvailableException, BookNotFoundException, InsufficientInventory {
+        bookInventory.setCount(1);
+        when(bookServiceInterface.getBook(anyString())).thenReturn(book);
+        when(bookInventoryServiceInterface.getInventory(anyString())).thenReturn(bookInventory);
+        when(bookInventoryRepoInterface.findByISBN(anyString())).thenReturn(bookInventory);
+        bookOrderingServiceInterface.buyBook("123", 2);
+    }
+
 
     @Test(expected = InventoryNotFoundException.class)
-    public void buyBookShouldReturnBadRequest() throws InventoryNotFoundException, BookNotAvailableException, BookNotFoundException, InsufficientInventory {
+    public void buyBookShouldReturnInventoryNotFound() throws InventoryNotFoundException, BookNotAvailableException, BookNotFoundException, InsufficientInventory {
         when(bookServiceInterface.getBook(anyString())).thenReturn(book);
         when(bookInventoryServiceInterface.getInventory(anyString())).thenThrow(new InventoryNotFoundException("Inventory not found"));
-        when(bookInventoryRepoInterface.findByISBN(anyString())).thenReturn(bookInventory);
-        when(bookRepoInterface.findByISBN(anyString())).thenReturn(book);
         bookOrderingServiceInterface.buyBook("123", 2);
     }
 
     @Test(expected = BookNotFoundException.class)
-    public void buyBookShouldReturnBookNotAvailable() throws BookNotFoundException {
+    public void buyBookShouldReturnBookNotAvailable() throws BookNotFoundException, InventoryNotFoundException, InsufficientInventory, BookNotAvailableException {
         when(bookServiceInterface.getBook(anyString())).thenThrow(new BookNotFoundException("Book Not Found"));
         when(bookRepoInterface.findByISBN(anyString())).thenReturn(book);
+        bookOrderingServiceInterface.buyBook("123", 2);
     }
 
 }

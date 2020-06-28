@@ -1,6 +1,5 @@
 package com.online.bookstore.repositories;
 
-import com.mongodb.client.result.DeleteResult;
 import com.online.bookstore.model.Book;
 import com.online.bookstore.model.Pagination;
 import com.online.bookstore.repositories.interfaces.BookRepoInterface;
