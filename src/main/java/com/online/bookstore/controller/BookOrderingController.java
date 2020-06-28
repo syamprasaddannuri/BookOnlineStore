@@ -1,9 +1,9 @@
 package com.online.bookstore.controller;
 
 import com.online.bookstore.constants.UriEndpoints;
-import com.online.bookstore.dto.request.OrderRequest;
 import com.online.bookstore.exception.BookNotAvailableException;
 import com.online.bookstore.exception.BookNotFoundException;
+import com.online.bookstore.exception.InsufficientInventory;
 import com.online.bookstore.exception.InventoryNotFoundException;
 import com.online.bookstore.services.BookOrderingServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +22,7 @@ public class BookOrderingController {
     }
 
     @GetMapping
-    public ResponseEntity buyBook(@RequestParam ("ISBN") String ISBN) throws BookNotAvailableException, InventoryNotFoundException, BookNotFoundException {
-        return ResponseEntity.ok(bookOrderingServiceInterface.buyBook(ISBN));
-    }
-
-    @PostMapping
-    public ResponseEntity storeOrderResponse(@RequestBody OrderRequest orderRequest) {
-        return ResponseEntity.ok(bookOrderingServiceInterface.storeOrderResponse(orderRequest));
+    public ResponseEntity buyBook(@RequestParam ("ISBN") String ISBN, @RequestParam ("quantity") int quantity) throws BookNotAvailableException, InventoryNotFoundException, BookNotFoundException, InsufficientInventory {
+        return ResponseEntity.ok(bookOrderingServiceInterface.buyBook(ISBN,quantity));
     }
 }

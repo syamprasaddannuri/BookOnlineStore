@@ -15,8 +15,6 @@ public interface BookRepoInterface {
 
     void deleteBook(Book book);
 
-    Book findByAuthorId(String id, Pagination pagination);
-
-    List<Book> searchByTitleAndISBN(String searchKey, Pagination pagination);
+    List<Book> searchInISBNAuthorTitle(String searchKey, Pagination pagination);
 
 }

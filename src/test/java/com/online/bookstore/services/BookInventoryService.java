@@ -1,12 +1,12 @@
 package com.online.bookstore.services;
 
 import com.online.bookstore.dto.request.BookInventoryRequest;
-import com.online.bookstore.enums.BookStatus;
 import com.online.bookstore.enums.BookInventoryRequestStatus;
+import com.online.bookstore.exception.InvalidRequestException;
 import com.online.bookstore.exception.InventoryNotFoundException;
 import com.online.bookstore.model.BookInventory;
 import com.online.bookstore.repositories.interfaces.BookInventoryRepoInterface;
-import com.online.bookstore.services.serviceImpl.BookInventoryServiceInterfaceImpl;
+import com.online.bookstore.services.serviceImpl.BookInventoryServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,8 +33,10 @@ public class BookInventoryService {
 
     @Before
     public void start() {
-        bookInventoryServiceInterface = new BookInventoryServiceInterfaceImpl(bookInventoryRepoInterface);
-        bookInventory = new BookInventory("123",1);
+        bookInventoryServiceInterface = new BookInventoryServiceImpl(bookInventoryRepoInterface);
+        bookInventory = new BookInventory();
+        bookInventory.setISBN("123");
+        bookInventory.setCount(10);
     }
 
     @Test
@@ -44,15 +46,15 @@ public class BookInventoryService {
     }
 
     @Test
-    public void incrementBookInventory() throws InventoryNotFoundException {
-        bookInventoryRequest = new BookInventoryRequest("123", BookInventoryRequestStatus.Increment);
+    public void incrementBookInventory() throws InventoryNotFoundException, InvalidRequestException {
+        bookInventoryRequest = new BookInventoryRequest("123", 10, BookInventoryRequestStatus.Increment);
         when(bookInventoryRepoInterface.findByISBN(anyString())).thenReturn(bookInventory);
         bookInventoryServiceInterface.updateInventory(bookInventoryRequest);
     }
 
     @Test
-    public void decrementBookInventory() throws InventoryNotFoundException {
-        bookInventoryRequest = new BookInventoryRequest("123", BookInventoryRequestStatus.Decrement);
+    public void decrementBookInventory() throws InventoryNotFoundException, InvalidRequestException {
+        bookInventoryRequest = new BookInventoryRequest("123",10, BookInventoryRequestStatus.Decrement);
         when(bookInventoryRepoInterface.findByISBN(anyString())).thenReturn(bookInventory);
         bookInventoryServiceInterface.updateInventory(bookInventoryRequest);
     }

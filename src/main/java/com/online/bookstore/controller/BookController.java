@@ -1,9 +1,9 @@
 package com.online.bookstore.controller;
 
 import com.online.bookstore.constants.UriEndpoints;
-import com.online.bookstore.dto.request.BookRequestDto;
-import com.online.bookstore.dto.request.BookStatusRequestDto;
+import com.online.bookstore.dto.request.BookUpdateRequest;
 import com.online.bookstore.exception.BookNotFoundException;
+import com.online.bookstore.model.Book;
 import com.online.bookstore.services.BookServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,8 +24,8 @@ public class BookController {
     }
 
     @PostMapping
-    public ResponseEntity addBook(@Valid @RequestBody BookRequestDto bookRequestDto) {
-        return ResponseEntity.ok(bookServiceInterface.addBook(bookRequestDto));
+    public ResponseEntity addBook(@Valid @RequestBody Book book) {
+        return ResponseEntity.ok(bookServiceInterface.addBook(book));
     }
 
     @DeleteMapping
@@ -35,16 +35,19 @@ public class BookController {
 
     @GetMapping
     public ResponseEntity searchBook(@RequestParam ("searchKey") String searchKey, @RequestParam ("pageNo") int pageNo, @RequestParam ("pageSize") int pageSize) throws BookNotFoundException {
+        if (searchKey == null) {
+            return ResponseEntity.badRequest().build();
+        }
         return ResponseEntity.ok(bookServiceInterface.searchBooks(searchKey,pageNo,pageSize));
     }
 
-    @GetMapping(UriEndpoints.GET_STATUS)
-    public ResponseEntity getBookStatus(@RequestParam("ISBN") String isbn) throws BookNotFoundException {
-        return ResponseEntity.ok(bookServiceInterface.getStatusOfBook(isbn));
+    @GetMapping(UriEndpoints.GET_BOOK)
+    public ResponseEntity getBook(@RequestParam("ISBN") String isbn) throws BookNotFoundException {
+        return ResponseEntity.ok(bookServiceInterface.getBook(isbn));
     }
 
-    @PostMapping(UriEndpoints.UPDATE_BOOK_STATUS)
-    public ResponseEntity updateBookStatus(@RequestBody BookStatusRequestDto bookStatusRequestDto) throws BookNotFoundException {
-        return ResponseEntity.ok(bookServiceInterface.updateBookStatus(bookStatusRequestDto));
+    @PostMapping(UriEndpoints.UPDATE)
+    public ResponseEntity updateBookStatus(@RequestBody BookUpdateRequest bookUpdateRequest) throws BookNotFoundException {
+        return ResponseEntity.ok(bookServiceInterface.updateBook(bookUpdateRequest));
     }
 }

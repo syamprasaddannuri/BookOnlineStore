@@ -1,6 +1,6 @@
 package com.online.bookstore.dto;
 
-import com.online.bookstore.dto.response.BookResponseDto;
+import com.online.bookstore.model.Book;
 import com.online.bookstore.model.Pagination;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class PaginatedBooks {
 
-    private List<BookResponseDto> bookList;
+    private List<Book> bookList;
 
     private Long count;
 

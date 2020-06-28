@@ -2,6 +2,7 @@ package com.online.bookstore.controller;
 
 import com.online.bookstore.constants.UriEndpoints;
 import com.online.bookstore.dto.request.BookInventoryRequest;
+import com.online.bookstore.exception.InvalidRequestException;
 import com.online.bookstore.exception.InventoryNotFoundException;
 import com.online.bookstore.services.BookInventoryServiceInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,7 +21,7 @@ public class BookInventoryController {
     }
 
     @PostMapping
-    public ResponseEntity updateInventory(@RequestBody BookInventoryRequest bookInventoryRequest) throws InventoryNotFoundException {
+    public ResponseEntity updateInventory(@RequestBody BookInventoryRequest bookInventoryRequest) throws InventoryNotFoundException, InvalidRequestException {
         return ResponseEntity.ok(bookInventoryServiceInterface.updateInventory(bookInventoryRequest));
     }
 

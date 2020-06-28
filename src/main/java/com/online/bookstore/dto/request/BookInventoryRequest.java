@@ -12,5 +12,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class BookInventoryRequest {
     private String isbn;
+    private int quantity;
     private BookInventoryRequestStatus bookInventoryRequestStatus;
 }

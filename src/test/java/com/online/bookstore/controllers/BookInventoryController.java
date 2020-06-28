@@ -1,11 +1,9 @@
 package com.online.bookstore.controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.online.bookstore.dto.request.BookInventoryRequest;
-import com.online.bookstore.dto.response.BookInventoryResponse;
-import com.online.bookstore.enums.BookStatus;
 import com.online.bookstore.enums.BookInventoryRequestStatus;
+import com.online.bookstore.exception.InvalidRequestException;
 import com.online.bookstore.exception.InventoryNotFoundException;
 import com.online.bookstore.model.BookInventory;
 import com.online.bookstore.services.BookInventoryServiceInterface;
@@ -39,18 +37,18 @@ public class BookInventoryController {
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private BookInventory bookInventory;
-    private BookInventoryResponse bookInventoryResponse;
     private BookInventoryRequest bookInventoryRequest;
 
     @Before
     public void start() {
-        bookInventory = new BookInventory("123",10);
-        bookInventoryResponse = new BookInventoryResponse("123",10);
+        bookInventory = new BookInventory();
+        bookInventory.setISBN("isbn1");
+        bookInventory.setCount(10);
     }
 
     @Test
-    public void IncrementInventory() throws Exception {
-        bookInventoryRequest = new BookInventoryRequest("123", BookInventoryRequestStatus.Increment);
+    public void IncrementInventory() throws Exception, InvalidRequestException {
+        bookInventoryRequest = new BookInventoryRequest("123", 10, BookInventoryRequestStatus.Increment);
         when(bookInventoryServiceInterface.updateInventory(any(BookInventoryRequest.class))).thenReturn(bookInventory);
         mockMvc.perform(post("/api/inventory")
                 .content(objectMapper.writeValueAsString(bookInventoryRequest))
@@ -59,8 +57,8 @@ public class BookInventoryController {
     }
 
     @Test
-    public void decrementInventory() throws Exception {
-        bookInventoryRequest = new BookInventoryRequest("123", BookInventoryRequestStatus.Decrement);
+    public void decrementInventory() throws Exception, InvalidRequestException {
+        bookInventoryRequest = new BookInventoryRequest("123", 1, BookInventoryRequestStatus.Decrement);
         when(bookInventoryServiceInterface.updateInventory(any(BookInventoryRequest.class))).thenReturn(bookInventory);
         mockMvc.perform(post("/api/inventory")
                 .content(objectMapper.writeValueAsString(bookInventoryRequest))
@@ -70,7 +68,7 @@ public class BookInventoryController {
 
     @Test
     public void getInventory() throws Exception {
-        when(bookInventoryServiceInterface.getInventory(anyString())).thenReturn(bookInventoryResponse);
+        when(bookInventoryServiceInterface.getInventory(anyString())).thenReturn(bookInventory);
         mockMvc.perform(get("/api/inventory/getInventory")
         .param("ISBN","123"))
                 .andExpect(status().isOk());

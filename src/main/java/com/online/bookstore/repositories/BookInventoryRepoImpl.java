@@ -30,9 +30,4 @@ public class BookInventoryRepoImpl implements BookInventoryRepoInterface {
         return mongoTemplate.findOne(query,BookInventory.class);
     }
 
-    @Override
-    public void deleteBookInventory(BookInventory bookInventory) {
-        mongoTemplate.remove(bookInventory);
-    }
-
 }

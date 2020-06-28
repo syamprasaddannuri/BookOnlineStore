@@ -18,5 +18,6 @@ public class Order {
     private String id;
     private String ISBN;
     private double price;
+    private int quantity;
     private OrderStatus orderStatus;
 }

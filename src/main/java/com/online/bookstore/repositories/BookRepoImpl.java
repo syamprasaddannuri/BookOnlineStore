@@ -41,21 +41,12 @@ public class BookRepoImpl implements BookRepoInterface {
     }
 
     @Override
-    public Book findByAuthorId(String id, Pagination pagination) {
-        Query query = new Query();
-        query.addCriteria(Criteria.where("authorId").is(id));
-        if(pagination.getPageNo() >= 0) {
-            query.with(PageRequest.of(pagination.getPageNo(),pagination.getPageSize()));
-        }
-        return mongoTemplate.findOne(query,Book.class);
-    }
-
-    @Override
-    public List<Book> searchByTitleAndISBN(String searchKey, Pagination pagination) {
+    public List<Book> searchInISBNAuthorTitle(String searchKey, Pagination pagination) {
         Query query = new Query();
         Criteria c1 = new Criteria().where("ISBN").regex(searchKey);
         Criteria c2 = new Criteria().where("title").regex(searchKey);
-        query.addCriteria(new Criteria().orOperator(c1,c2));
+        Criteria c3 = new Criteria().where("author").regex(searchKey);
+        query.addCriteria(new Criteria().orOperator(c1,c2, c3));
         if(pagination.getPageNo() >= 0) {
             query.with(PageRequest.of(pagination.getPageNo(), pagination.getPageSize()));
         }
