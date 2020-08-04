@@ -35,9 +35,9 @@ public class MediaPostsCacheService {
 
                     String[] descriptionWords = description.split(" ");
                     for(int i = 0 ; i < descriptionWords.length ; i++) {
-                        Set<MediaPost> set = map.getOrDefault(titleWords[i], new HashSet<>());
+                        Set<MediaPost> set = map.getOrDefault(descriptionWords[i], new HashSet<>());
                         set.add(mediaPost);
-                        map.put(titleWords[i],set);
+                        map.put(descriptionWords[i],set);
                     }
                 }
         );
